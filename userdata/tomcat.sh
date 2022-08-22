@@ -35,14 +35,14 @@ systemctl daemon-reload
 systemctl start tomcat
 systemctl enable tomcat
 
-git clone -b vp-rem https://github.com/devopshydclub/vprofile-repo.git
-cd vprofile-repo
+git clone -b main https://github.com/ashwinbittu/stackApp.git
+cd stackApp
 mvn install
 systemctl stop tomcat
 sleep 120
 rm -rf /usr/local/tomcat8/webapps/ROOT*
-cp target/vprofile-v2.war /usr/local/tomcat8/webapps/ROOT.war
+cp target/stackapp-v2.war /usr/local/tomcat8/webapps/ROOT.war
 systemctl start tomcat
 sleep 300
-cp /vprofile-vm-data/application.properties /usr/local/tomcat8/webapps/ROOT/WEB-INF/classes/application.properties
+cp /stackapp-vm-data/application.properties /usr/local/tomcat8/webapps/ROOT/WEB-INF/classes/application.properties
 systemctl restart tomcat8
