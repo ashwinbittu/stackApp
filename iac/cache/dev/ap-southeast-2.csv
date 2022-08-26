@@ -1,0 +1,9 @@
+app_name;sampleapp;terraform;false;false;App Name
+app_id;167843;terraform;false;false;App ID
+app_env;DEV;terraform;false;false;App ENV
+ami_owners;043042377913;terraform;false;false;AppAMI
+app_version;2;terraform;false;false;APP Version
+inst_device_name;\/dev\/xvdh;terraform;false;false;App Block Device Name
+repave_strategy;rolling;terraform;false;false;Repaving Strategy
+inst_type;t2.micro;terraform;false;false;App EC2 Instnace Type
+key_name;continokeytest;terraform;false;false;SrvKeyName

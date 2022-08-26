@@ -1,0 +1,9 @@
+app_name;stackapp-infra;terraform;false;false;App Name
+app_id;167843;terraform;false;false;App ID
+app_env;dev;terraform;false;false;App ENV
+lt_name;ltapp;terraform;false;false;App Name
+lt_description;launchtemplate for Application;terraform;false;false;App Name
+ami_id;ami-0e040c48614ad1327;terraform;false;false;AppAMI
+user_datascript;tomcat.sh;terraform;false;false;AppAMI
+instance_type;t2.micro;terraform;false;false;App EC2 Instnace Type
+repave_strategy;rolling;terraform;false;false;Repaving Strategy
