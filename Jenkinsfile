@@ -75,7 +75,7 @@ pipeline {
                     steps {
                         withCredentials([string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
                             sh """
-                            echo "ART_TOKEN--->>>>"$ART_TOKEN
+
                             curl -H "X-JFrog-Art-Api:$ART_TOKEN" -T target/stackapp-v2.war "https://ashwinbittu.jfrog.io/artifactory/stackapp-repo/${BUILD_NUMBER}/stackapp-v2.war"
                             
                             """
@@ -152,10 +152,10 @@ pipeline {
                         sh 'echo 11'
                         withCredentials([usernamePassword(credentialsId: 'github-person-acces-token', usernameVariable: 'REPO_API_USER', passwordVariable: 'REPO_API_TOKEN')]){
                                 sh 'echo 22'
-                                withCredentials([string(credentialsId: 'TFE_TOKEN', variable: 'TFE_TOKEN'),string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
+                                withCredentials([string(credentialsId: 'TFE_TOKEN', variable: 'TFE_TOKEN'), string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
 
                                     sh """
-                                        sh 'echo 33'
+                                        echo 33
                                         echo "TFE_TOKEN--->>>>"$TFE_TOKEN
                                         echo "REPO_API_TOKEN--->>>>"$REPO_API_TOKEN
                                         echo "AWS_ACCESS_KEY_ID--->>>>"$AWS_ACCESS_KEY_ID
