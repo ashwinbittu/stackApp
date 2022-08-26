@@ -73,7 +73,10 @@ pipeline {
 
         stage ('Upload App Image to Artifactory') {
                     steps {
-                        curl -H "X-JFrog-Art-Api:AKCp8nFvgcLcbRxa51de8NQddCdvj3gN4BRkpsPLDRh4qimV1BfmwmdQpXe1HUh88QybFjkGg" -T target/stackapp-v2.war "https://ashwinbittu.jfrog.io/artifactory/stackapp-repo/stackapp-v2.war"
+                        
+                        sh 'curl -H "X-JFrog-Art-Api:AKCp8nFvgcLcbRxa51de8NQddCdvj3gN4BRkpsPLDRh4qimV1BfmwmdQpXe1HUh88QybFjkGg" -T target/stackapp-v2.war "https://ashwinbittu.jfrog.io/artifactory/stackapp-repo/stackapp-v2.war"'
+                        
+
                         /*rtUpload (
                             buildName: JOB_NAME,
                             buildNumber: BUILD_NUMBER,
