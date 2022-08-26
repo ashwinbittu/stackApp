@@ -162,11 +162,11 @@ pipeline {
 
                                         export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
                                         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-                                        export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+                                        export AWS_REGION=$AWS_DEFAULT_REGION
                                         export targetRegion=$AWS_DEFAULT_REGION
 
                                         export env=$APP_ENV_DEV
-                                        export appname='stackApp-infra'
+                                        export appname=$app_name_stackapp
 
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
