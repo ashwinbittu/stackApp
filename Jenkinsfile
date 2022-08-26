@@ -76,7 +76,7 @@ pipeline {
                         rtUpload (
                             buildName: JOB_NAME,
                             buildNumber: BUILD_NUMBER,
-                            serverId: '${artifactrepocreds}', // Obtain an Artifactory server instance, defined in Jenkins --> Manage:
+                            serverId: 'jfrog-artifact-saas', // Obtain an Artifactory server instance, defined in Jenkins --> Manage:
                             spec: '''{
                                     "files": [
                                         {
