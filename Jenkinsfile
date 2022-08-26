@@ -168,6 +168,7 @@ pipeline {
                                         export env=$APP_ENV_DEV
                                         export appname=$app_name_stackapp
 
+                                        rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
                                         cd stackapppipelines
                                         ./manageInfra.sh create
