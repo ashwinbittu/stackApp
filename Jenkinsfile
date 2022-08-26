@@ -166,7 +166,7 @@ pipeline {
                                         export targetRegion=$AWS_DEFAULT_REGION
 
                                         export env=$APP_ENV_DEV
-                                        export appname=$app_name_stackapp
+                                        export appname='stackApp-infra'
 
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
