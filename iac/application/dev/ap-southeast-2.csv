@@ -1,4 +1,4 @@
-app_name;stackapp-infra;terraform;false;false;App Name
+app_name;stackapp;terraform;false;false;App Name
 app_id;167843;terraform;false;false;App ID
 app_env;dev;terraform;false;false;App ENV
 lt_name;ltapp;terraform;false;false;App Name
