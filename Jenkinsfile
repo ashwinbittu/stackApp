@@ -149,11 +149,13 @@ pipeline {
 
                 //checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/ashwinbittu/managecontinoinfra.git']]])
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
+                        sh 'echo 11'
                         withCredentials([usernamePassword(credentialsId: github-person-acces-token, usernameVariable: 'REPO_API_USER', passwordVariable: 'REPO_API_TOKEN')]){
+                                sh 'echo 22'
                                 withCredentials([string(credentialsId: 'TFE_TOKEN', variable: 'TFE_TOKEN'),string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
 
                                     sh """
-                                        
+                                        sh 'echo 33'
                                         echo "TFE_TOKEN--->>>>"$TFE_TOKEN
                                         echo "REPO_API_TOKEN--->>>>"$REPO_API_TOKEN
                                         echo "AWS_ACCESS_KEY_ID--->>>>"$AWS_ACCESS_KEY_ID
