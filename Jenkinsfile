@@ -168,7 +168,6 @@ pipeline {
                                         export env=$APP_ENV_DEV
                                         export appname=$app_name_stackapp
 
-                                        yum install -y jq
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
                                         cd stackapppipelines; chmod 777 *.*;
