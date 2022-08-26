@@ -73,13 +73,13 @@ pipeline {
 
         stage ('Upload App Image to Artifactory') {
                     steps {
-
-                        sh """
-                        echo "ART_TOKEN--->>>>"$ART_TOKEN
-                        curl -H "X-JFrog-Art-Api:$ART_TOKEN" -T target/stackapp-v2.war "https://ashwinbittu.jfrog.io/artifactory/stackapp-repo/${BUILD_NUMBER}/stackapp-v2.war"
-                        
-                        """
-
+                        withCredentials([string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
+                            sh """
+                            echo "ART_TOKEN--->>>>"$ART_TOKEN
+                            curl -H "X-JFrog-Art-Api:$ART_TOKEN" -T target/stackapp-v2.war "https://ashwinbittu.jfrog.io/artifactory/stackapp-repo/${BUILD_NUMBER}/stackapp-v2.war"
+                            
+                            """
+                        }
                         /*rtUpload (
                             buildName: JOB_NAME,
                             buildNumber: BUILD_NUMBER,
@@ -110,7 +110,7 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
                         sh """
-                            export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+                            #export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
                             aws sts get-caller-identity
                             rm -rf stackApp-infra
                             git clone -b main https://github.com/ashwinbittu/stackApp-infra.git
@@ -148,36 +148,38 @@ pipeline {
             steps {
 
                 //checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/ashwinbittu/managecontinoinfra.git']]])
-                  withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
-                        withCredentials([string(credentialsId: 'TFE_TOKEN', variable: 'TFE_TOKEN'),string(credentialsId: 'github-person-acces-token', variable: 'REPO_API_TOKEN')]){ 
+                    withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
+                        withCredentials([usernamePassword(credentialsId: github-person-acces-token, usernameVariable: 'REPO_API_USER', passwordVariable: 'REPO_API_TOKEN')]){
+                                withCredentials([string(credentialsId: 'TFE_TOKEN', variable: 'TFE_TOKEN'),string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
 
-                            sh """
-                                
-                                echo "TFE_TOKEN--->>>>"$TFE_TOKEN
-                                echo "REPO_API_TOKEN--->>>>"$REPO_API_TOKEN
-                                echo "AWS_ACCESS_KEY_ID--->>>>"$AWS_ACCESS_KEY_ID
-                                echo "AWS_SECRET_ACCESS_KEY--->>>>"$AWS_SECRET_ACCESS_KEY
-                                echo "AWS_DEFAULT_REGION--->>>>"$AWS_DEFAULT_REGION
-                                
-                                export TFE_TOKEN=$TFE_TOKEN 
-                                export TFE_ORG="radammcorp"
-                                export TFE_ADDR="app.terraform.io"
-                                export REPO_API_TOKEN=$github-person-acces-token 
-                                export REPO_FID="ashwinbittu"
+                                    sh """
+                                        
+                                        echo "TFE_TOKEN--->>>>"$TFE_TOKEN
+                                        echo "REPO_API_TOKEN--->>>>"$REPO_API_TOKEN
+                                        echo "AWS_ACCESS_KEY_ID--->>>>"$AWS_ACCESS_KEY_ID
+                                        echo "AWS_SECRET_ACCESS_KEY--->>>>"$AWS_SECRET_ACCESS_KEY
+                                        echo "AWS_DEFAULT_REGION--->>>>"$AWS_DEFAULT_REGION
+                                        
+                                        export TFE_TOKEN=$TFE_TOKEN 
+                                        export TFE_ORG="radammcorp"
+                                        export TFE_ADDR="app.terraform.io"
+                                        export REPO_API_TOKEN=$REPO_API_TOKEN 
+                                        export REPO_FID="ashwinbittu"
 
-                                export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-                                export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-                                export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
-                                export targetRegion=$AWS_DEFAULT_REGION
+                                        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                                        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                                        export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+                                        export targetRegion=$AWS_DEFAULT_REGION
 
-                                export env="dev"
-                                export appname="stackApp-infra"
+                                        export env="dev"
+                                        export appname="stackApp-infra"
 
-                                git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
-                                #cd stackapppipelines
-                                #./manageInfra.sh create
-                            """   
-                        }       
+                                        git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
+                                        #cd stackapppipelines
+                                        #./manageInfra.sh create
+                                    """   
+                                }  
+                        }     
                     }
             }
         }
