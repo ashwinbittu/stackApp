@@ -170,7 +170,7 @@ pipeline {
 
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
-                                        cd stackapppipelines
+                                        cd stackapppipelines; chmod 777 *.*;
                                         ./manageInfra.sh create
 
                                     """   
