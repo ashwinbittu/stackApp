@@ -146,39 +146,32 @@ pipeline {
 
         stage('Infra Creation Using Terraform'){
             steps {
-
-                //checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/ashwinbittu/managecontinoinfra.git']]])
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
-                        sh 'echo 11'
+
                         withCredentials([usernamePassword(credentialsId: 'github-person-acces-token', usernameVariable: 'REPO_API_USER', passwordVariable: 'REPO_API_TOKEN')]){
-                                sh 'echo 22'
+
                                 withCredentials([string(credentialsId: 'TFE_TOKEN', variable: 'TFE_TOKEN'), string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
 
                                     sh """
-                                        echo 33
-                                        echo "TFE_TOKEN--->>>>"$TFE_TOKEN
-                                        echo "REPO_API_TOKEN--->>>>"$REPO_API_TOKEN
-                                        echo "AWS_ACCESS_KEY_ID--->>>>"$AWS_ACCESS_KEY_ID
-                                        echo "AWS_SECRET_ACCESS_KEY--->>>>"$AWS_SECRET_ACCESS_KEY
-                                        echo "AWS_DEFAULT_REGION--->>>>"$AWS_DEFAULT_REGION
                                         
                                         export TFE_TOKEN=$TFE_TOKEN 
-                                        export TFE_ORG="radammcorp"
-                                        export TFE_ADDR="app.terraform.io"
+                                        export TFE_ORG=$TFE_ORG
+                                        export TFE_ADDR=$TFE_ADDR
                                         export REPO_API_TOKEN=$REPO_API_TOKEN 
-                                        export REPO_FID="ashwinbittu"
+                                        export REPO_FID=$REPO_API_USER
 
                                         export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
                                         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
                                         export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
                                         export targetRegion=$AWS_DEFAULT_REGION
 
-                                        export env="dev"
-                                        export appname="stackApp-infra"
+                                        export env=$APP_ENV_DEV
+                                        export appname=$app_name_stackapp
 
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
-                                        #cd stackapppipelines
-                                        #./manageInfra.sh create
+                                        cd stackapppipelines
+                                        ./manageInfra.sh create
+
                                     """   
                                 }  
                         }     
