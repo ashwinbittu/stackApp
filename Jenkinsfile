@@ -112,7 +112,7 @@ pipeline {
                         sh '''
                             #export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
                             aws sts get-caller-identity
-                            rm -rf stackApp-infra
+                            rm -rf stackApp
                             git clone -b main https://github.com/ashwinbittu/stackApp.git
                             cd stackApp/iac/packer
                             ls -rtl
