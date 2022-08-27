@@ -76,8 +76,8 @@ build {
     timeout      = "10s"       
   }
 
-  post-processor "shell-local" {
-    inline = ["echo foo"]
+  post-processor "manifest" {
+    output = "manifest.json"
   }
 }
 
