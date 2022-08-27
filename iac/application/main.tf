@@ -43,8 +43,10 @@ module "asg" {
   
   load_balancers = data.terraform_remote_state.network.outputs.aws_elb_name
   vpc_zone_identifier = data.terraform_remote_state.network.outputs.aws_subnet_ids  
-  launch_template_name = module.app-launch-template.launch_template_name 
   
+  app_id   = var.app_id 
+  app_name   = var.app_name 
+  app_env   = var.app_env 
   repave_strategy = var.repave_strategy  
   layer = "app"
   snsemail = "ashwin.bittu@gmail.com"
@@ -56,19 +58,20 @@ module "asg" {
   health_check_type         = "EC2"
   force_delete              = true
 
-  launch_template {
-    id = module.app-launch-template.launch_template_id  
-    version = module.app-launch-template.launch_template_latest_version 
+  launch_template_name = module.app-launch-template.launch_template_name
+
+  instance_refresh = {
+    strategy = "Rolling"
+    preferences = {
+      checkpoint_delay       = 600
+      checkpoint_percentages = [35, 70, 100]
+      instance_warmup        = 300
+      min_healthy_percentage = 50
+    }
+    triggers = ["desired_capacity"]
   }
 
-  instance_refresh {
-      strategy = "Rolling"
-      preferences {
-        min_healthy_percentage = 50            
-      }
-      triggers = [ "desired_capacity" ] 
-  }
-   
+  
   scaling_policies = {
       app-policy-1 = {
         policy_type = "TargetTrackingScaling"
