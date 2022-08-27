@@ -43,7 +43,7 @@ module "app-asg" {
   
   load_balancers = data.terraform_remote_state.network.outputs.aws_elb_name
   vpc_zone_identifier = data.terraform_remote_state.network.outputs.aws_subnet_ids  
-  name = module.app-launch-template.launch_template_name
+  launch_template_name = module.app-launch-template.launch_template_name
 
   app_id   = var.app_id 
   app_name   = var.app_name 
