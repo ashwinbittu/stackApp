@@ -180,7 +180,8 @@ pipeline {
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
                                         cd stackapppipelines; chmod 777 *.*;
-                                        ./manageInfra.sh create
+                                        #./manageInfra.sh create
+                                        ./manageInfra.sh destroy
 
                                     """   
                                 }  
