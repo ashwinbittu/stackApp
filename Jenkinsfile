@@ -119,7 +119,7 @@ pipeline {
                             #App/Tomcat Bake
                             /usr/bin/packer validate -var 'app_layer=app' -var 'source_ami=$ubuntu_source_ami' -var 'app_name=$app_name_stackapp' -var 'instance_type=$instance_type' -var 'script=$app_userscript' -var 'ssh_username=$ubuntu_ssh_username' -var 'root-device-type=$ubuntu_root_device_type' -var 'virtualization-type=$ubuntu_virtualization_type' -var 'owners=$ubuntu_owners' template.ubuntu.pkr.hcl
                             /usr/bin/packer build    -var 'app_layer=app' -var 'source_ami=$ubuntu_source_ami' -var 'app_name=$app_name_stackapp' -var 'instance_type=$instance_type' -var 'script=$app_userscript' -var 'ssh_username=$ubuntu_ssh_username' -var 'root-device-type=$ubuntu_root_device_type' -var 'virtualization-type=$ubuntu_virtualization_type' -var 'owners=$ubuntu_owners' template.ubuntu.pkr.hcl 
-                            AMI_ID=$(jq -r '.builds[-1].artifact_id' packer-manifest.json | cut -d ":" -f2)
+                            AMI_ID=$(jq -r '.builds[-1].artifact_id' packer-manifest.json | cut -d ':' -f2)
                             echo $AMI_ID
                             
                             #DB/Maria-MySQL Bake
