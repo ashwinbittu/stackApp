@@ -113,8 +113,8 @@ pipeline {
                             #export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
                             aws sts get-caller-identity
                             rm -rf stackApp-infra
-                            git clone -b main https://github.com/ashwinbittu/stackApp-infra.git
-                            cd stackApp-infra/packer
+                            git clone -b main https://github.com/ashwinbittu/stackApp.git
+                            cd stackApp/iac/packer
                             
                             #App/Tomcat Bake
                             /usr/bin/packer validate -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners" template.ubuntu.pkr.hcl
