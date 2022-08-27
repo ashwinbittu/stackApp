@@ -41,7 +41,6 @@ module "app-asg" {
   source  = "app.terraform.io/radammcorp/asg/aws"
   name = "app-asg"
   
-  #load_balancers = [data.terraform_remote_state.network.outputs.aws_app_alb_id]
   target_group_arns = data.terraform_remote_state.network.outputs.aws_app_alb_target_group_arns
   vpc_zone_identifier = data.terraform_remote_state.network.outputs.aws_subnet_ids  
 
@@ -57,7 +56,7 @@ module "app-asg" {
 
   desired_capacity          = 1
   min_size                  = 1
-  max_size                  = 3
+  max_size                  = 2
   health_check_grace_period = 300
   health_check_type         = "EC2"
   force_delete              = true
@@ -83,7 +82,6 @@ module "app-asg" {
         target_tracking_configuration = {
           predefined_metric_specification = {
             predefined_metric_type = "ASGAverageCPUUtilization"
-            resource_label = "MyLabel"
           }
           target_value = 50.0
         }
