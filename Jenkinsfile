@@ -172,6 +172,12 @@ pipeline {
                                         export env=$APP_ENV_DEV
                                         export appname=$app_name_stackapp
 
+                                        export app_ami_id="ami-0c2b200d39b7590ee"
+                                        export db_ami_id="ami-02f96cede3bf5e5b1"
+                                        export cache_ami_id="ami-02090d97a17822b64"
+                                        export mesg_ami_id="ami-07d94258c314aa1c1"
+
+
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
                                         cd stackapppipelines; chmod 777 *.*;
