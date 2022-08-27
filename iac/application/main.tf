@@ -36,15 +36,51 @@ module "app-launch-template" {
 
 }
 
-/*
+
 module "asg" {
-  source  = "app.terraform.io/CentenePoC/asg/aws"
-  aws_elb_name = data.terraform_remote_state.network.outputs.aws_elb_name
-  aws_subnet_ids = data.terraform_remote_state.network.outputs.aws_subnet_ids  
-  aws_launch_configuration_name = module.launch-configuration.aws_launch_configuration_name 
+  source  = "app.terraform.io/radammcorp/asg/aws"
+  name = "app-asg"
+  
+  load_balancers = data.terraform_remote_state.network.outputs.aws_elb_name
+  vpc_zone_identifier = data.terraform_remote_state.network.outputs.aws_subnet_ids  
+  launch_template_name = module.app-launch-template.launch_template_name 
+  
   repave_strategy = var.repave_strategy  
-  app_env   = var.app_env
-  app_name   = var.app_name  
-  app_id   = var.app_id   
+  layer = "app"
+  snsemail = "ashwin.bittu@gmail.com"
+
+  desired_capacity          = 1
+  min_size                  = 1
+  max_size                  = 3
+  health_check_grace_period = 300
+  health_check_type         = "EC2"
+  force_delete              = true
+
+  launch_template {
+    id = module.app-launch-template.launch_template_id  
+    version = module.app-launch-template.launch_template_latest_version 
+  }
+
+  instance_refresh {
+      strategy = "Rolling"
+      preferences {
+        min_healthy_percentage = 50            
+      }
+      triggers = [ "desired_capacity" ] 
+  }
+   
+  scaling_policies = {
+      app-policy-1 = {
+        policy_type = "TargetTrackingScaling"
+        estimated_instance_warmup = 180 
+        target_tracking_configuration = {
+          predefined_metric_specification = {
+            predefined_metric_type = "ASGAverageCPUUtilization"
+            resource_label = "MyLabel"
+          }
+          target_value = 50.0
+        }
+      }
+    }
+
 }
-*/
