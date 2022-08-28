@@ -7,7 +7,13 @@ sudo apt install default-jre -y >>  /tmp/user-data.log
 sudo apt install default-jdk -y >> /tmp/user-data.log
 sudo apt install tomcat9 tomcat9-admin tomcat9-docs tomcat9-common git -y >> /tmp/user-data.log
 
-curl -H "X-JFrog-Art-Api:AKCp8nFvgcLcbRxa51de8NQddCdvj3gN4BRkpsPLDRh4qimV1BfmwmdQpXe1HUh88QybFjkGg" -O "https://ashwinbittu.jfrog.io/artifactory/stackapp-repo/<TARGET_FILE_PATH>"
+sudo systemctl stop tomcat9 >> /tmp/user-data.log
+sudo cd /var/lib/tomcat9/webapps >> /tmp/user-data.log
+sudo rm -rf ROOT.war  >> /tmp/user-data.log
+sudo curl -vO -L -H "X-JFrog-Art-Api:AKCp8nFvgcLcbRxa51de8NQddCdvj3gN4BRkpsPLDRh4qimV1BfmwmdQpXe1HUh88QybFjkGg" -O "https://ashwinbittu.jfrog.io/artifactory/stackapp-repo/131/stackapp-v2.war"
+sudo mv stackapp-v2.war ROOT.war >> /tmp/user-data.log
+sudo systemctl start tomcat9 >> /tmp/user-data.log
+sudo systemctl status tomcat9 >> /tmp/user-data.log
 
 touch /home/ubuntu/user-data.log
 cat /tmp/user-data.log > /home/ubuntu/user-data.log
