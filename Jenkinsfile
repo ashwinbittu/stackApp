@@ -122,27 +122,25 @@ pipeline {
                             /usr/bin/packer build    -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners" template.ubuntu.pkr.hcl
                             AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
                             cp manifest.json app_img_manifest.json
-                            app_ami_id=$AMI_ID
-
-                            echo "app_ami_id--bake->>"$app_ami_id
                             
                             #Mesg/Rabbitmq
                             /usr/bin/packer validate -var "app_layer=msg" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$msg_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl
-                            #/usr/bin/packer build    -var "app_layer=msg" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$msg_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl
-                            #AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
-                            #export mesg_ami_id=$AMI_ID
+                            /usr/bin/packer build    -var "app_layer=msg" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$msg_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl
+                            AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
+                            cp manifest.json db_img_manifest.json
+
 
                             #DB/Maria-MySQL Bake
                             /usr/bin/packer validate -var "app_layer=db" -var "source_ami=$amzlnx_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$db_userscript" -var "ssh_username=$amzlnx_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$amzlnx_owners"  template.amzlinx2.pkr.hcl
-                            #/usr/bin/packer build    -var "app_layer=db" -var "source_ami=$amzlnx_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$db_userscript" -var "ssh_username=$amzlnx_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$amzlnx_owners"  template.amzlinx2.pkr.hcl
-                            #AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
-                            #export db_ami_id=$AMI_ID
+                            /usr/bin/packer build    -var "app_layer=db" -var "source_ami=$amzlnx_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$db_userscript" -var "ssh_username=$amzlnx_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$amzlnx_owners"  template.amzlinx2.pkr.hcl
+                            AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
+                            cp manifest.json cache_img_manifest.json
 
                             #Cache/Memcache
                             /usr/bin/packer validate -var "app_layer=cache" -var "source_ami=$amzlnx_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$cache_userscript" -var "ssh_username=$amzlnx_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$amzlnx_owners"  template.amzlinx2.pkr.hcl
-                            #/usr/bin/packer build    -var "app_layer=cache" -var "source_ami=$amzlnx_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$cache_userscript" -var "ssh_username=$amzlnx_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$amzlnx_owners"  template.amzlinx2.pkr.hcl
-                            #AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
-                            #export cache_ami_id=$AMI_ID
+                            /usr/bin/packer build    -var "app_layer=cache" -var "source_ami=$amzlnx_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$cache_userscript" -var "ssh_username=$amzlnx_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$amzlnx_owners"  template.amzlinx2.pkr.hcl
+                            AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
+                            cp manifest.json message_img_manifest.json
 
 
                         
@@ -178,24 +176,24 @@ pipeline {
                                         export env=$APP_ENV_DEV
                                         export appname=$app_name_stackapp
 
-                                        pwd
                                         cd stackApp/iac/packer
-                                        ls -rtl
-                                        cat app_img_manifest.json
                                         AMI_ID=$(jq -r '.builds[-1].artifact_id' app_img_manifest.json | cut -d ":" -f2)
-
-                                        echo "AMI_ID-----terra---->>"$AMI_ID
-
-                                        export app_ami_id=$app_ami_id
-                                        export db_ami_id="ami-02f96cede3bf5e5b1"
-                                        export cache_ami_id="ami-02090d97a17822b64"
-                                        export mesg_ami_id="ami-07d94258c314aa1c1"
+                                        export app_ami_id=$AMI_ID
+                                        
+                                        AMI_ID=$(jq -r '.builds[-1].artifact_id' db_img_manifest.json | cut -d ":" -f2)                                        
+                                        export db_ami_id=$AMI_ID
+                                        
+                                        AMI_ID=$(jq -r '.builds[-1].artifact_id' cache_img_manifest.json | cut -d ":" -f2)                                        
+                                        export cache_ami_id=$AMI_ID
+                                        
+                                        AMI_ID=$(jq -r '.builds[-1].artifact_id' message_img_manifest.json | cut -d ":" -f2)                                        
+                                        export mesg_ami_id=$AMI_ID
 
 
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
                                         cd stackapppipelines; chmod 777 *.*;
-                                        #./manageInfra.sh create
+                                        ./manageInfra.sh create
                                         #./manageInfra.sh destroy
 
                                     '''   
