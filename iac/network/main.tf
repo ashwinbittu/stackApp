@@ -67,7 +67,7 @@ module "sg-db" {
     computed_ingress_with_source_security_group_id = [
         {
           rule = "mysql-tcp"
-          source_security_group_id = module.sg-elb.security_group_id
+          source_security_group_id = module.sg-app.security_group_id
         }       
       ]
     number_of_computed_ingress_with_source_security_group_id = 1  
@@ -85,7 +85,7 @@ module "sg-cache" {
     computed_ingress_with_source_security_group_id = [
         {
           rule = "memcached-tcp"
-          source_security_group_id = module.sg-elb.security_group_id
+          source_security_group_id = module.sg-app.security_group_id
         }       
       ]
     number_of_computed_ingress_with_source_security_group_id = 1      
@@ -103,7 +103,7 @@ module "sg-message" {
     computed_ingress_with_source_security_group_id = [
         {
           rule = "rabbitmq-5672-tcp"
-          source_security_group_id = module.sg-elb.security_group_id
+          source_security_group_id = module.sg-app.security_group_id
         }        
       ]
     number_of_computed_ingress_with_source_security_group_id = 1      
