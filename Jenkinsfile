@@ -112,7 +112,7 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
                         script{
-                            aws sts get-caller-identity
+                            //aws sts get-caller-identity
                             rm -rf stackApp;
                             git clone -b main https://github.com/ashwinbittu/stackApp.git;
                             cd stackApp/iac/packer;
