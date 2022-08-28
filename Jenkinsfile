@@ -119,9 +119,10 @@ pipeline {
                             
                             #App/Tomcat Bake
                             /usr/bin/packer validate -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl
-                            #/usr/bin/packer build    -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners" template.ubuntu.pkr.hcl
-                            #AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
-                            #app_ami_id=$AMI_ID
+                            /usr/bin/packer build    -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners" template.ubuntu.pkr.hcl
+                            AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
+                            cp manifest.json app_img_manifest.json
+                            app_ami_id=$AMI_ID
 
                             echo "app_ami_id--bake->>"$app_ami_id
                             
@@ -178,9 +179,12 @@ pipeline {
                                         export appname=$app_name_stackapp
 
                                         pwd
+                                        cd stackApp/iac/packer
                                         ls -rtl
+                                        cat app_img_manifest.json
+                                        AMI_ID=$(jq -r '.builds[-1].artifact_id' app_img_manifest.json | cut -d ":" -f2)
 
-                                        echo "app_ami_id--------->>"$app_ami_id
+                                        echo "AMI_ID-----terra---->>"$AMI_ID
 
                                         export app_ami_id=$app_ami_id
                                         export db_ami_id="ami-02f96cede3bf5e5b1"
