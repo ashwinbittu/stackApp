@@ -162,7 +162,7 @@ pipeline {
 
                                 withCredentials([string(credentialsId: 'TFE_TOKEN', variable: 'TFE_TOKEN'), string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
 
-                                    sh """
+                                    sh '''
                                         
                                         export TFE_TOKEN=$TFE_TOKEN 
                                         export TFE_ORG=$TFE_ORG
@@ -198,7 +198,7 @@ pipeline {
                                         #./manageInfra.sh create
                                         #./manageInfra.sh destroy
 
-                                    """   
+                                    '''   
                                 }  
                         }     
                     }
