@@ -199,18 +199,7 @@ module "alb-db" {
       name      = "tgdb"
       backend_protocol = "TCP"
       backend_port     = 3306
-      target_type      = "instance"
-      health_check = {
-        enabled             = true
-        interval            = 30
-        path                = ""
-        port                = "3306"
-        healthy_threshold   = 3
-        unhealthy_threshold = 3
-        timeout             = 6
-        protocol            = "TCP"
-        matcher             = "200-399"
-      }      
+      target_type      = "instance"     
     }
   ]
 
@@ -243,18 +232,7 @@ module "alb-cache" {
       name      = "tgcache"
       backend_protocol = "TCP"
       backend_port     = 11211
-      target_type      = "instance"
-      health_check = {
-        enabled             = true
-        interval            = 30
-        path                = ""
-        port                = "11211"
-        healthy_threshold   = 3
-        unhealthy_threshold = 3
-        timeout             = 6
-        protocol            = "TCP"
-        matcher             = "200-399"
-      }      
+      target_type      = "instance"    
     }
   ]
 
@@ -287,18 +265,7 @@ module "alb-message" {
       name      = "tgmessage"
       backend_protocol = "TCP"
       backend_port     = 5672
-      target_type      = "instance"
-      health_check = {
-        enabled             = true
-        interval            = 30
-        path                = ""
-        port                = "5672"
-        healthy_threshold   = 3
-        unhealthy_threshold = 3
-        timeout             = 6
-        protocol            = "TCP"
-        matcher             = "200-399"
-      }      
+      target_type      = "instance"     
     }
   ]
 
