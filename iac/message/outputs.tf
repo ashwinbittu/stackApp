@@ -1,7 +1,7 @@
-output "aws_launch_configuration_name" {
-  value = module.launch-configuration.aws_launch_configuration_name
+output "message-launch-temmplate_id" {
+  value = module.message-launch-template.launch_template_id
 }
 
-output "aws_autoscaling_group_name" {
-  value = module.asg.aws_autoscaling_group_name
+output "message-asg_id" {
+  value = module.message-asg.autoscaling_group_id
 }

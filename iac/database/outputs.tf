@@ -1,7 +1,7 @@
-output "aws_launch_configuration_name" {
-  value = module.launch-configuration.aws_launch_configuration_name
+output "db-launch-temmplate_id" {
+  value = module.db-launch-template.launch_template_id
 }
 
-output "aws_autoscaling_group_name" {
-  value = module.asg.aws_autoscaling_group_name
+output "db-asg_id" {
+  value = module.db-asg.autoscaling_group_id
 }

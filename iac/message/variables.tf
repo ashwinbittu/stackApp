@@ -18,37 +18,30 @@ variable "app_name" {
 variable "app_id" {
 }
 
-variable "app_version" {
-}
-
 variable "repave_strategy" {
-}
-
-variable "inst_type" {
-}
-
-variable "aws_subnet_ids" {
   default = ""
 }
 
-variable "aws_security_group_instances_id" {
+variable "lt_name" {
+}
+
+variable "lt_description" {
   default = ""
 }
 
-variable "aws_ebs_snap_id" {
+variable "ami_id" {
   default = ""
 }
 
-variable "aws_ebs_volume_size" {
+variable "user_datascript" {
   default = ""
 }
 
-variable "aws_ebs_volume_type" {
+variable "instdevice_name" {
   default = ""
 }
 
-variable "inst_device_name" {
+variable "instance_type" {
+  default = ""
 }
 
-variable "ami_owners" {
-}

@@ -23,9 +23,9 @@ module "app-launch-template" {
   securitygroup_id = data.terraform_remote_state.network.outputs.aws_app_security_group_id  
   instance_type = var.instance_type
   instdevice_name = var.instdevice_name 
-  user_datascript =  var.user_datascript  
 
   /*
+  user_datascript =  var.user_datascript  
   repave_strategy = var.repave_strategy  
   app_version   = var.app_version   
   ami_owners   = var.ami_owners 
@@ -35,7 +35,6 @@ module "app-launch-template" {
   */
 
 }
-
 
 module "app-asg" {
   source  = "app.terraform.io/radammcorp/asg/aws"
@@ -89,3 +88,4 @@ module "app-asg" {
     }
 
 }
+

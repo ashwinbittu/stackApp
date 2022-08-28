@@ -65,6 +65,17 @@ output "aws_message_security_group_id" {
 output "aws_message_security_group_instance_name" {
   value = module.sg-message.security_group_name
 }
+output "aws_app_alb_id" {
+  value = module.alb-app.lb_id
+}
+
+output "aws_app_alb_arn" {
+  value = module.alb-app.lb_arn
+}
+
+output "aws_app_alb_dns_name" {
+  value = module.alb-app.lb_dns_name
+}
 
 output "aws_app_alb_arn_suffix" {
   value = module.alb-app.lb_arn_suffix
@@ -86,18 +97,106 @@ output "aws_app_alb_target_group_names" {
   value = module.alb-app.target_group_names
 }
 
-output "aws_app_alb_id" {
-  value = module.alb-app.lb_id
+
+
+output "aws_db_alb_id" {
+  value = module.alb-db.lb_id
 }
 
-output "aws_app_alb_arn" {
-  value = module.alb-app.lb_arn
+output "aws_db_alb_arn" {
+  value = module.alb-db.lb_arn
 }
 
-output "aws_app_alb_dns_name" {
-  value = module.alb-app.lb_dns_name
+output "aws_db_alb_dns_name" {
+  value = module.alb-db.lb_dns_name
 }
 
+output "aws_db_alb_arn_suffix" {
+  value = module.alb-db.lb_arn_suffix
+}
+
+output "aws_db_alb_zone_id" {
+  value = module.alb-db.lb_zone_id
+}
+
+output "aws_db_alb_target_group_arns" {
+  value = module.alb-db.target_group_arns
+}
+
+output "aws_db_alb_target_group_arns_suffixes" {
+  value = module.alb-db.target_group_arn_suffixes
+}
+
+output "aws_db_alb_target_group_names" {
+  value = module.alb-db.target_group_names
+}
+
+
+output "aws_cache_alb_id" {
+  value = module.alb-cache.lb_id
+}
+
+output "aws_cache_alb_arn" {
+  value = module.alb-cache.lb_arn
+}
+
+output "aws_cache_alb_dns_name" {
+  value = module.alb-cache.lb_dns_name
+}
+
+output "aws_cache_alb_arn_suffix" {
+  value = module.alb-cache.lb_arn_suffix
+}
+
+output "aws_cache_alb_zone_id" {
+  value = module.alb-cache.lb_zone_id
+}
+
+output "aws_cache_alb_target_group_arns" {
+  value = module.alb-cache.target_group_arns
+}
+
+output "aws_cache_alb_target_group_arns_suffixes" {
+  value = module.alb-cache.target_group_arn_suffixes
+}
+
+output "aws_cache_alb_target_group_names" {
+  value = module.alb-cache.target_group_names
+}
+
+
+
+output "aws_message_alb_id" {
+  value = module.alb-message.lb_id
+}
+
+output "aws_message_alb_arn" {
+  value = module.alb-message.lb_arn
+}
+
+output "aws_message_alb_dns_name" {
+  value = module.alb-message.lb_dns_name
+}
+
+output "aws_message_alb_arn_suffix" {
+  value = module.alb-message.lb_arn_suffix
+}
+
+output "aws_message_alb_zone_id" {
+  value = module.alb-message.lb_zone_id
+}
+
+output "aws_message_alb_target_group_arns" {
+  value = module.alb-message.target_group_arns
+}
+
+output "aws_message_alb_target_group_arns_suffixes" {
+  value = module.alb-message.target_group_arn_suffixes
+}
+
+output "aws_message_alb_target_group_names" {
+  value = module.alb-message.target_group_names
+}
 /*
 
 output "aws_security_group_elb_id" {

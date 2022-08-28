@@ -14,28 +14,78 @@ data "terraform_remote_state" "network" {
   }
 }
 
-module "launch-configuration" {
-  source  = "app.terraform.io/CentenePoC/launch-configuration/aws"
-  aws_ec2_keypair_name = data.terraform_remote_state.network.outputs.aws_ec2_keypair_name 
-  aws_security_group_instances_id = data.terraform_remote_state.network.outputs.aws_security_group_instances_id  
-  inst_type = var.inst_type
-  aws_ebs_snap_id = var.aws_ebs_snap_id 
-  aws_ebs_volume_size = var.aws_ebs_volume_size
-  aws_ebs_volume_type = var.aws_ebs_volume_type
-  inst_device_name = var.inst_device_name   
+module "db-launch-template" {
+  source  = "app.terraform.io/radammcorp/launchtemplate/aws"
+  lt_name = var.lt_name  
+  lt_description = var.lt_description  
+  ami_id = var.ami_id  
+  key_name = data.terraform_remote_state.network.outputs.aws_ec2_key-name 
+  securitygroup_id = data.terraform_remote_state.network.outputs.aws_db_security_group_id  
+  instance_type = var.instance_type
+  instdevice_name = var.instdevice_name 
+
+  /*
+  user_datascript =  var.user_datascript 
   repave_strategy = var.repave_strategy  
   app_version   = var.app_version   
   ami_owners   = var.ami_owners 
+  aws_ebs_snap_id = var.aws_ebs_snap_id 
+  aws_ebs_volume_size = var.aws_ebs_volume_size
+  aws_ebs_volume_type = var.aws_ebs_volume_type
+  */
+
 }
 
+module "db-asg" {
+  source  = "app.terraform.io/radammcorp/asg/aws"
+  name = "db-asg"
+  
+  target_group_arns = data.terraform_remote_state.network.outputs.aws_db_alb_target_group_arns
+  vpc_zone_identifier = data.terraform_remote_state.network.outputs.aws_subnet_ids  
 
-module "asg" {
-  source  = "app.terraform.io/CentenePoC/asg/aws"
-  aws_elb_name = data.terraform_remote_state.network.outputs.aws_elb_name
-  aws_subnet_ids = data.terraform_remote_state.network.outputs.aws_subnet_ids  
-  aws_launch_configuration_name = module.launch-configuration.aws_launch_configuration_name 
+  launch_template_id = module.db-launch-template.launch_template_id
+  launch_template_version = module.db-launch-template.launch_template_latest_version
+  
+  app_id   = var.app_id 
+  app_name   = var.app_name 
+  app_env   = var.app_env 
   repave_strategy = var.repave_strategy  
-  app_env   = var.app_env
-  app_name   = var.app_name  
-  app_id   = var.app_id   
+  layer = "cache"
+  snsemail = "ashwin.bittu@gmail.com"
+
+  desired_capacity          = 1
+  min_size                  = 1
+  max_size                  = 2
+  health_check_grace_period = 300
+  health_check_type         = "EC2"
+  force_delete              = true
+
+  
+
+  instance_refresh = {
+    strategy = "Rolling"
+    preferences = {
+      checkpoint_delay       = 600
+      checkpoint_percentages = [35, 70, 100]
+      instance_warmup        = 300
+      min_healthy_percentage = 50
+    }
+    triggers = ["desired_capacity"]
+  }
+
+  
+  scaling_policies = {
+      db-policy-1 = {
+        policy_type = "TargetTrackingScaling"
+        estimated_instance_warmup = 180 
+        target_tracking_configuration = {
+          predefined_metric_specification = {
+            predefined_metric_type = "ASGAverageCPUUtilization"
+          }
+          target_value = 50.0
+        }
+      }
+    }
+
 }
+

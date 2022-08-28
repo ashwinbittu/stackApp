@@ -172,6 +172,138 @@ module "alb-app" {
 }
 
 
+module "alb-db" {
+  source  = "app.terraform.io/radammcorp/alb/aws"
+  
+  app_env   = var.app_env
+  app_name   = var.app_name  
+  app_id   = var.app_id 
+  
+  name = "albdb"
+  load_balancer_type = "application"
+  vpc_id             = module.vpc.aws_vpc_id
+  subnets            = module.vpc.aws_subnet_ids
+  security_groups    = [module.sg-db.security_group_id]
+
+  http_tcp_listeners = [
+    {
+      port               = 3306
+      protocol           = "TCP"
+      target_group_index = 0
+      action_type        = "forward"
+    }
+  ]
+
+  target_groups = [
+    {
+      name      = "tgdb"
+      backend_protocol = "TCP"
+      backend_port     = 3306
+      target_type      = "instance"
+      health_check = {
+        enabled             = true
+        interval            = 30
+        path                = ""
+        port                = "3306"
+        healthy_threshold   = 3
+        unhealthy_threshold = 3
+        timeout             = 6
+        protocol            = "TCP"
+        matcher             = "200-399"
+      }      
+    }
+  ]
+
+}
+
+module "alb-cache" {
+  source  = "app.terraform.io/radammcorp/alb/aws"
+  
+  app_env   = var.app_env
+  app_name   = var.app_name  
+  app_id   = var.app_id 
+  
+  name = "albcache"
+  load_balancer_type = "application"
+  vpc_id             = module.vpc.aws_vpc_id
+  subnets            = module.vpc.aws_subnet_ids
+  security_groups    = [module.sg-cache.security_group_id]
+
+  http_tcp_listeners = [
+    {
+      port               = 11211
+      protocol           = "TCP"
+      target_group_index = 0
+      action_type        = "forward"
+    }
+  ]
+
+  target_groups = [
+    {
+      name      = "tgcache"
+      backend_protocol = "TCP"
+      backend_port     = 11211
+      target_type      = "instance"
+      health_check = {
+        enabled             = true
+        interval            = 30
+        path                = ""
+        port                = "11211"
+        healthy_threshold   = 3
+        unhealthy_threshold = 3
+        timeout             = 6
+        protocol            = "TCP"
+        matcher             = "200-399"
+      }      
+    }
+  ]
+
+}
+
+module "alb-message" {
+  source  = "app.terraform.io/radammcorp/alb/aws"
+  
+  app_env   = var.app_env
+  app_name   = var.app_name  
+  app_id   = var.app_id 
+  
+  name = "albmessage"
+  load_balancer_type = "application"
+  vpc_id             = module.vpc.aws_vpc_id
+  subnets            = module.vpc.aws_subnet_ids
+  security_groups    = [module.sg-message.security_group_id]
+
+  http_tcp_listeners = [
+    {
+      port               = 5672
+      protocol           = "TCP"
+      target_group_index = 0
+      action_type        = "forward"
+    }
+  ]
+
+  target_groups = [
+    {
+      name      = "tgmessage"
+      backend_protocol = "TCP"
+      backend_port     = 5672
+      target_type      = "instance"
+      health_check = {
+        enabled             = true
+        interval            = 30
+        path                = ""
+        port                = "5672"
+        healthy_threshold   = 3
+        unhealthy_threshold = 3
+        timeout             = 6
+        protocol            = "TCP"
+        matcher             = "200-399"
+      }      
+    }
+  ]
+
+}
+
 
 /*
 
