@@ -178,6 +178,7 @@ pipeline {
                                         export appname=$app_name_stackapp
 
                                         pwd
+                                        ls -rtl
 
                                         echo "app_ami_id--------->>"$app_ami_id
 
