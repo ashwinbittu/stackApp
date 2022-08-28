@@ -23,9 +23,10 @@ module "cache-launch-template" {
   securitygroup_id = data.terraform_remote_state.network.outputs.aws_cache_security_group_id  
   instance_type = var.instance_type
   instdevice_name = var.instdevice_name 
-
-  /*
   user_datascript =  var.user_datascript 
+  
+  /*
+
   repave_strategy = var.repave_strategy  
   app_version   = var.app_version   
   ami_owners   = var.ami_owners 
