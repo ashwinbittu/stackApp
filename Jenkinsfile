@@ -111,22 +111,21 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
-                        script{
-                            //aws sts get-caller-identity
-                            rm -rf stackApp;
-                            git clone -b main https://github.com/ashwinbittu/stackApp.git;
-                            cd stackApp/iac/packer;
+                        sh '''
+                            aws sts get-caller-identity
+                            rm -rf stackApp
+                            git clone -b main https://github.com/ashwinbittu/stackApp.git
+                            cd stackApp/iac/packer
                             
-                            /*App-Tomcat Bake*/
-                            /usr/bin/packer validate -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl;
-                            /usr/bin/packer build    -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners" template.ubuntu.pkr.hcl;
-                            AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2);
-                            app_ami_id=$AMI_ID;
+                            #App/Tomcat Bake
+                            /usr/bin/packer validate -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl
+                            /usr/bin/packer build    -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners" template.ubuntu.pkr.hcl
+                            AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
+                            app_ami_id=$AMI_ID
 
-                            echo "app_ami_id--bake->>"$app_ami_id;
+                            echo "app_ami_id--bake->>"$app_ami_id
                             
-                            /*
-                            //Mesg-Rabbitmq Bake
+                            #Mesg/Rabbitmq
                             /usr/bin/packer validate -var "app_layer=msg" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$msg_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl
                             #/usr/bin/packer build    -var "app_layer=msg" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$msg_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl
                             #AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
@@ -138,16 +137,16 @@ pipeline {
                             #AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
                             #export db_ami_id=$AMI_ID
 
-                            #Cache-Memcache Bake
+                            #Cache/Memcache
                             /usr/bin/packer validate -var "app_layer=cache" -var "source_ami=$amzlnx_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$cache_userscript" -var "ssh_username=$amzlnx_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$amzlnx_owners"  template.amzlinx2.pkr.hcl
                             #/usr/bin/packer build    -var "app_layer=cache" -var "source_ami=$amzlnx_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$cache_userscript" -var "ssh_username=$amzlnx_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$amzlnx_owners"  template.amzlinx2.pkr.hcl
                             #AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
                             #export cache_ami_id=$AMI_ID
-                            */
+
 
                         
 
-                        }
+                        '''
                     
                     }
             }
@@ -178,7 +177,7 @@ pipeline {
                                         export env=$APP_ENV_DEV
                                         export appname=$app_name_stackapp
 
-                                        echo "app_ami_id-----terra---->>"$app_ami_id
+                                        echo "app_ami_id--------->>"$app_ami_id
 
                                         export app_ami_id=$app_ami_id
                                         export db_ami_id="ami-02f96cede3bf5e5b1"
