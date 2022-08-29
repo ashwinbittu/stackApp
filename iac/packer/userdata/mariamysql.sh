@@ -4,7 +4,7 @@ sudo yum update -y > /tmp/user-data.log
 sudo yum install epel-release -y >>  /tmp/user-data.log
 sudo yum install git zip unzip -y >>  /tmp/user-data.log
 sudo yum install mariadb-server -y >>  /tmp/user-data.log
-
+sudo yum install telnet unzip curl -y >>  /tmp/user-data.log
 
 # starting & enabling mariadb-server
 sudo systemctl start mariadb >>  /tmp/user-data.log

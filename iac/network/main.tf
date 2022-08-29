@@ -31,8 +31,19 @@ module "sg-alb" {
       {
         rule = "http-80-tcp"
         cidr_blocks = "0.0.0.0/0"
-      },         
+      }         
   ]
+
+  egress_with_cidr_blocks = [
+      {
+        rule = "https-443-tcp"
+        cidr_blocks = "0.0.0.0/0"
+      },  
+      {
+        rule = "http-80-tcp"
+        cidr_blocks = "0.0.0.0/0"
+      }  
+  ]  
 }
 
 module "sg-app" {
@@ -50,9 +61,18 @@ module "sg-app" {
           rule = "http-8080-tcp"
           source_security_group_id = module.sg-alb.security_group_id
         }        
-      ]
+    ]
+
     number_of_computed_ingress_with_source_security_group_id = 1
-      
+
+    computed_egress_with_source_security_group_id = [
+      {
+        rule = "http-8080-tcp"
+        source_security_group_id = module.sg-alb.security_group_id
+      }           
+    ]
+
+    number_of_computed_egress_with_source_security_group_id = 1      
   }
 
 module "sg-db" {
@@ -70,7 +90,15 @@ module "sg-db" {
           source_security_group_id = module.sg-app.security_group_id
         }       
       ]
-    number_of_computed_ingress_with_source_security_group_id = 1  
+     
+    computed_egress_with_source_security_group_id = [
+        {
+          rule = "mysql-tcp"
+          source_security_group_id = module.sg-app.security_group_id
+        }       
+      ]
+
+    number_of_computed_egress_with_source_security_group_id = 1
 }  
 
 module "sg-cache" {
@@ -88,7 +116,14 @@ module "sg-cache" {
           source_security_group_id = module.sg-app.security_group_id
         }       
       ]
-    number_of_computed_ingress_with_source_security_group_id = 1      
+    computed_egress_with_source_security_group_id = [
+        {
+          rule = "memcached-tcp"
+          source_security_group_id = module.sg-app.security_group_id
+        }       
+      ]
+          
+    number_of_computed_egress_with_source_security_group_id = 1         
 } 
 
 module "sg-message" {
@@ -106,7 +141,14 @@ module "sg-message" {
           source_security_group_id = module.sg-app.security_group_id
         }        
       ]
-    number_of_computed_ingress_with_source_security_group_id = 1      
+    computed_egress_with_source_security_group_id = [
+        {
+          rule = "rabbitmq-5672-tcp"
+          source_security_group_id = module.sg-app.security_group_id
+        }       
+      ]
+          
+    number_of_computed_egress_with_source_security_group_id = 1        
 } 
 
 module "ec2key" {
@@ -171,6 +213,40 @@ module "alb-front" {
 
 }
 
+/*
+
+#data "aws_route53_zone" "selected" {
+#  name         = var.aws_route53_zone_name
+#  #private_zone = false
+#}
+
+#module "route53" {
+#  source = "app.terraform.io/radammcorp/route53/aws"
+#  aws_region = var.aws_region
+#  app_env   = var.app_env
+#  app_name  = var.app_name  
+#  app_id   = var.app_id  
+#  aws_route53_zone_id = data.aws_route53_zone.selected.zone_id
+#  aws_route53_record_name = var.aws_route53_record_name
+
+#  # Adding to "dulastack." needs to be revied with service owner 
+#  #aws_elb_dns_name = var.aws_elb_dns_name == "" ? "dummy-elb.us-east-1.elb.amazonaws.com" : "dualstack.${var.aws_elb_dns_name}"
+#  aws_elb_dns_name = module.elb.aws_elb_dns_name #"dualstack.${module.elb.aws_elb_dns_name}"
+
+#  # Passing defalut us-east-1 zone id to avoid apply error, logic needs to change later 
+#  #aws_elb_zone_id = var.aws_elb_zone_id == "" ? "Z35SXDOTRQ7X7K" : var.aws_elb_zone_id
+#  aws_elb_zone_id = module.elb.aws_elb_zone_id
+
+
+#  repave_strategy = var.repave_strategy 
+#  aws_route53_zone_name = var.aws_route53_zone_name
+#  aws_vpc_id = module.vpc.aws_vpc_id
+#}
+
+*/
+
+
+/*
 
 module "alb-db" {
   source  = "app.terraform.io/radammcorp/alb/aws"
@@ -272,37 +348,9 @@ module "alb-message" {
 }
 
 
-/*
-
-#data "aws_route53_zone" "selected" {
-#  name         = var.aws_route53_zone_name
-#  #private_zone = false
-#}
-
-#module "route53" {
-#  source = "app.terraform.io/radammcorp/route53/aws"
-#  aws_region = var.aws_region
-#  app_env   = var.app_env
-#  app_name  = var.app_name  
-#  app_id   = var.app_id  
-#  aws_route53_zone_id = data.aws_route53_zone.selected.zone_id
-#  aws_route53_record_name = var.aws_route53_record_name
-
-#  # Adding to "dulastack." needs to be revied with service owner 
-#  #aws_elb_dns_name = var.aws_elb_dns_name == "" ? "dummy-elb.us-east-1.elb.amazonaws.com" : "dualstack.${var.aws_elb_dns_name}"
-#  aws_elb_dns_name = module.elb.aws_elb_dns_name #"dualstack.${module.elb.aws_elb_dns_name}"
-
-#  # Passing defalut us-east-1 zone id to avoid apply error, logic needs to change later 
-#  #aws_elb_zone_id = var.aws_elb_zone_id == "" ? "Z35SXDOTRQ7X7K" : var.aws_elb_zone_id
-#  aws_elb_zone_id = module.elb.aws_elb_zone_id
-
-
-#  repave_strategy = var.repave_strategy 
-#  aws_route53_zone_name = var.aws_route53_zone_name
-#  aws_vpc_id = module.vpc.aws_vpc_id
-#}
-
 */
+
+
 
 
 

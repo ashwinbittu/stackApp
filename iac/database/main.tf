@@ -24,7 +24,7 @@ module "db-launch-template" {
   instance_type = var.instance_type
   instdevice_name = var.instdevice_name 
   user_datascript =  var.user_datascript
-  
+
   /*
  
   repave_strategy = var.repave_strategy  
@@ -41,7 +41,7 @@ module "db-asg" {
   source  = "app.terraform.io/radammcorp/asg/aws"
   name = "db-asg"
   
-  target_group_arns = data.terraform_remote_state.network.outputs.aws_db_alb_target_group_arns
+  #target_group_arns = data.terraform_remote_state.network.outputs.aws_db_alb_target_group_arns
   vpc_zone_identifier = data.terraform_remote_state.network.outputs.aws_subnet_ids  
 
   launch_template_id = module.db-launch-template.launch_template_id
@@ -56,7 +56,7 @@ module "db-asg" {
 
   desired_capacity          = 1
   min_size                  = 1
-  max_size                  = 2
+  max_size                  = 1
   health_check_grace_period = 300
   health_check_type         = "EC2"
   force_delete              = true

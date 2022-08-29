@@ -41,7 +41,7 @@ module "message-asg" {
   source  = "app.terraform.io/radammcorp/asg/aws"
   name = "message-asg"
   
-  target_group_arns = data.terraform_remote_state.network.outputs.aws_message_alb_target_group_arns
+  #target_group_arns = data.terraform_remote_state.network.outputs.aws_message_alb_target_group_arns
   vpc_zone_identifier = data.terraform_remote_state.network.outputs.aws_subnet_ids  
 
   launch_template_id = module.message-launch-template.launch_template_id

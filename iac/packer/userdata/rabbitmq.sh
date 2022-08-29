@@ -3,7 +3,7 @@ echo set debconf to Noninteractive
 echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
 
 sudo apt update -y  > /tmp/user-data.log
-sudo apt install curl software-properties-common apt-transport-https lsb-release -y >>  /tmp/user-data.log
+sudo apt install curl telnet unzip software-properties-common apt-transport-https lsb-release -y >>  /tmp/user-data.log
 curl -fsSL https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/erlang.gpg
 sudo apt update -y  >>  /tmp/user-data.log
 sudo apt install erlang -y  >>  /tmp/user-data.log

@@ -98,6 +98,17 @@ output "aws_front_alb_target_group_names" {
 }
 
 
+/*
+
+output "aws_route53_zone_id" {
+  value = module.route53.aws_route53_zone_id
+}
+
+output "aws_route53_zone_nsservers" {
+  value = module.route53.aws_route53_zone_nsservers
+}*/
+
+/*
 
 output "aws_db_alb_id" {
   value = module.alb-db.lb_id
@@ -197,13 +208,5 @@ output "aws_message_alb_target_group_arns_suffixes" {
 output "aws_message_alb_target_group_names" {
   value = module.alb-message.target_group_names
 }
-/*
 
-output "aws_route53_zone_id" {
-  value = module.route53.aws_route53_zone_id
-}
-
-output "aws_route53_zone_nsservers" {
-  value = module.route53.aws_route53_zone_nsservers
-}*/
-
+*/
