@@ -155,7 +155,8 @@ module "sg-message" {
     ]
 
     number_of_computed_ingress_with_source_security_group_id = 1
-     
+    
+        
     computed_egress_with_source_security_group_id = [
         {
           rule = "rabbitmq-5672-tcp"
