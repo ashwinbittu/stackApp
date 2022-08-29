@@ -36,13 +36,16 @@ module "sg-alb" {
       {
         rule = "http-80-tcp"
         cidr_blocks = "0.0.0.0/0"
-      },
-      {
-        from_port                = 0
-        to_port                  = 0
-        protocol                 = -1
-        source_security_group_id = data.aws_security_group.default.id
-      }         
+      }        
+  ]
+
+  computed_ingress_with_source_security_group_id = [
+    {
+      from_port                = 0
+      to_port                  = 0
+      protocol                 = -1
+      source_security_group_id = data.aws_security_group.default.id
+    }        
   ]
 
   egress_with_cidr_blocks = [
