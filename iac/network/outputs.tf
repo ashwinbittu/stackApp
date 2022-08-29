@@ -26,12 +26,12 @@ output "combined_key_details_hidden" {
 }
 
 
-output "aws_elb_security_group_id" {
-  value = module.sg-elb.security_group_id
+output "aws_alb_security_group_id" {
+  value = module.sg-alb.security_group_id
 }
 
-output "aws_elb_security_group_instance_name" {
-  value = module.sg-elb.security_group_name
+output "aws_alb_security_group_instance_name" {
+  value = module.sg-alb.security_group_name
 }
 
 output "aws_app_security_group_id" {
@@ -198,22 +198,6 @@ output "aws_message_alb_target_group_names" {
   value = module.alb-message.target_group_names
 }
 /*
-
-output "aws_security_group_elb_id" {
-  value = module.sg.aws_security_group_elb_id
-}
-
-output "aws_elb_name" {
-  value = module.elb.aws_elb_name
-}
-
-output "aws_elb_dns_name" {
-  value = module.elb.aws_elb_dns_name
-}
-
-output "aws_elb_zone_id" {
-  value = module.elb.aws_elb_zone_id
-}
 
 output "aws_route53_zone_id" {
   value = module.route53.aws_route53_zone_id
