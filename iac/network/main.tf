@@ -261,14 +261,14 @@ module "alb-db" {
   subnets            = module.vpc.aws_subnet_ids
   security_groups    = [module.sg-db.security_group_id]
 
-  /*http_tcp_listeners = [
+  http_tcp_listeners = [
     {
       port               = 3306
       protocol           = "TCP"
       target_group_index = 0
       action_type        = "forward"
     }
-  ]*/
+  ]
 
   target_groups = [
     {
@@ -294,14 +294,14 @@ module "alb-cache" {
   subnets            = module.vpc.aws_subnet_ids
   security_groups    = [module.sg-cache.security_group_id]
 
-  /*http_tcp_listeners = [
+  http_tcp_listeners = [
     {
       port               = 11211
       protocol           = "TCP"
       target_group_index = 0
       action_type        = "forward"
     }
-  ]*/
+  ]
 
   target_groups = [
     {
@@ -327,14 +327,14 @@ module "alb-message" {
   subnets            = module.vpc.aws_subnet_ids
   security_groups    = [module.sg-message.security_group_id]
 
-  /*http_tcp_listeners = [
+  http_tcp_listeners = [
     {
       port               = 5672
       protocol           = "TCP"
       target_group_index = 0
       action_type        = "forward"
     }
-  ]*/
+  ]
 
   target_groups = [
     {
