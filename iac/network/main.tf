@@ -13,14 +13,14 @@ module "vpc" {
   aws_vpc_instance_tenancy = var.aws_vpc_instance_tenancy
 }
 
-module "sg-elb" {
+module "sg-alb" {
   source = "app.terraform.io/radammcorp/sg/aws"
   #aws_region = var.aws_region
   app_env   = var.app_env
   app_name   = var.app_name  
   app_id   = var.app_id    
   aws_vpc_id = module.vpc.aws_vpc_id
-  name   = "sgelb"
+  name   = "sgalb"
   description = "security group for load balancer"
 
   ingress_with_cidr_blocks = [
@@ -48,7 +48,7 @@ module "sg-app" {
     computed_ingress_with_source_security_group_id = [
         {
           rule = "http-8080-tcp"
-          source_security_group_id = module.sg-elb.security_group_id
+          source_security_group_id = module.sg-alb.security_group_id
         }        
       ]
     number_of_computed_ingress_with_source_security_group_id = 1
@@ -117,18 +117,18 @@ module "ec2key" {
   app_id   = var.app_id   
 }
 
-module "alb-app" {
+module "alb-front" {
   source  = "app.terraform.io/radammcorp/alb/aws"
   
   app_env   = var.app_env
   app_name   = var.app_name  
   app_id   = var.app_id 
   
-  name = "albapp"
+  name = "albfront"
   load_balancer_type = "application"
   vpc_id             = module.vpc.aws_vpc_id
   subnets            = module.vpc.aws_subnet_ids
-  security_groups    = [module.sg-app.security_group_id]
+  security_groups    = [module.sg-alb.security_group_id]
 
   http_tcp_listeners = [
     {
