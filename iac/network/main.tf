@@ -34,6 +34,8 @@ module "sg-alb" {
       }         
   ]
 
+  number_of_computed_ingress_with_cidr_blocks = 2
+
   egress_with_cidr_blocks = [
       {
         rule = "https-443-tcp"
@@ -43,7 +45,9 @@ module "sg-alb" {
         rule = "http-80-tcp"
         cidr_blocks = "0.0.0.0/0"
       }  
-  ]  
+  ]
+
+  number_of_computed_egress_with_cidr_blocks = 2  
 }
 
 module "sg-app" {
@@ -84,12 +88,15 @@ module "sg-db" {
     aws_vpc_id = module.vpc.aws_vpc_id
     name   = "sgdb"   
     description = "security group for database"
+    
     computed_ingress_with_source_security_group_id = [
         {
           rule = "mysql-tcp"
           source_security_group_id = module.sg-app.security_group_id
         }       
       ]
+
+    number_of_computed_ingress_with_source_security_group_id = 1  
      
     computed_egress_with_source_security_group_id = [
         {
@@ -110,12 +117,16 @@ module "sg-cache" {
     aws_vpc_id = module.vpc.aws_vpc_id
     name   = "sgcache"   
     description = "security group for cache"
+    
     computed_ingress_with_source_security_group_id = [
         {
           rule = "memcached-tcp"
           source_security_group_id = module.sg-app.security_group_id
         }       
       ]
+
+    number_of_computed_ingress_with_source_security_group_id = 1  
+
     computed_egress_with_source_security_group_id = [
         {
           rule = "memcached-tcp"
@@ -135,12 +146,16 @@ module "sg-message" {
     aws_vpc_id = module.vpc.aws_vpc_id
     name   = "sgmessage"   
     description = "security group for messaging"
+    
     computed_ingress_with_source_security_group_id = [
         {
           rule = "rabbitmq-5672-tcp"
           source_security_group_id = module.sg-app.security_group_id
         }        
-      ]
+    ]
+
+    number_of_computed_ingress_with_source_security_group_id = 1
+     
     computed_egress_with_source_security_group_id = [
         {
           rule = "rabbitmq-5672-tcp"
