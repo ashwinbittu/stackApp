@@ -78,7 +78,8 @@ pipeline {
                         withCredentials([string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
                             sh """
                             echo "HH"
-                            curl -H "X-JFrog-Art-Api:$ART_TOKEN" -T target/stackapp-v2.war "https://ashwinbittu.jfrog.io/artifactory/stackapp-repo/${BUILD_NUMBER}/stackapp-v2.war"
+                            
+                            #curl -H "X-JFrog-Art-Api:$ART_TOKEN" -T target/stackapp-v2.war "https://ashwinbittu.jfrog.io/artifactory/stackapp-repo/${BUILD_NUMBER}/stackapp-v2.war"
                             
                             """
                         }
@@ -118,9 +119,9 @@ pipeline {
                             cd stackApp/iac/packer
                             
                             #App/Tomcat Bake
-                            /usr/bin/packer validate -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl
-                            /usr/bin/packer build    -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners" template.ubuntu.pkr.hcl
-                            cp manifest.json app_img_manifest.json
+                            #/usr/bin/packer validate -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl
+                            #/usr/bin/packer build    -var "app_layer=app" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$app_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners" template.ubuntu.pkr.hcl
+                            #cp manifest.json app_img_manifest.json
                             
                             #Mesg/Rabbitmq
                             #/usr/bin/packer validate -var "app_layer=msg" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$msg_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl
@@ -173,9 +174,9 @@ pipeline {
                                         export appname=$app_name_stackapp
 
                                         cd stackApp/iac/packer
-                                        AMI_ID=$(jq -r '.builds[-1].artifact_id' app_img_manifest.json | cut -d ":" -f2)
-                                        export app_ami_id=$AMI_ID
-                                        #export app_ami_id="ami-024b124816b6a1563"
+                                        #AMI_ID=$(jq -r '.builds[-1].artifact_id' app_img_manifest.json | cut -d ":" -f2)
+                                        #export app_ami_id=$AMI_ID
+                                        export app_ami_id="ami-0ab6cd77655cb413c"
                                         
                                         #AMI_ID=$(jq -r '.builds[-1].artifact_id' db_img_manifest.json | cut -d ":" -f2)                                        
                                         #export db_ami_id=$AMI_ID
@@ -193,8 +194,8 @@ pipeline {
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
                                         cd stackapppipelines; chmod 777 *.*;
-                                        ./manageInfra.sh create
-                                        #./manageInfra.sh destroy
+                                        #./manageInfra.sh create
+                                        ./manageInfra.sh destroy
 
                                     '''   
                                 }  
