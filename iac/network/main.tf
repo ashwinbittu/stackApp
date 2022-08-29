@@ -39,7 +39,7 @@ module "sg-alb" {
       }        
   ]
 
-  computed_ingress_with_source_security_group_id = [
+  ingress_rules = [
     {
       from_port                = 0
       to_port                  = 0
