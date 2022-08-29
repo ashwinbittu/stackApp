@@ -39,7 +39,7 @@ module "sg-alb" {
       }        
   ]
 
-  ingress_rules = [
+  ingress_with_source_security_group_id = [
     {
       from_port                = 0
       to_port                  = 0
