@@ -65,36 +65,36 @@ output "aws_message_security_group_id" {
 output "aws_message_security_group_instance_name" {
   value = module.sg-message.security_group_name
 }
-output "aws_app_alb_id" {
-  value = module.alb-app.lb_id
+output "aws_front_alb_id" {
+  value = module.alb-front.lb_id
 }
 
-output "aws_app_alb_arn" {
-  value = module.alb-app.lb_arn
+output "aws_front_alb_arn" {
+  value = module.alb-front.lb_arn
 }
 
-output "aws_app_alb_dns_name" {
-  value = module.alb-app.lb_dns_name
+output "aws_front_alb_dns_name" {
+  value = module.alb-front.lb_dns_name
 }
 
-output "aws_app_alb_arn_suffix" {
-  value = module.alb-app.lb_arn_suffix
+output "aws_front_alb_arn_suffix" {
+  value = module.alb-front.lb_arn_suffix
 }
 
-output "aws_app_alb_zone_id" {
-  value = module.alb-app.lb_zone_id
+output "aws_front_alb_zone_id" {
+  value = module.alb-front.lb_zone_id
 }
 
-output "aws_app_alb_target_group_arns" {
-  value = module.alb-app.target_group_arns
+output "aws_front_alb_target_group_arns" {
+  value = module.alb-front.target_group_arns
 }
 
-output "aws_app_alb_target_group_arns_suffixes" {
-  value = module.alb-app.target_group_arn_suffixes
+output "aws_front_alb_target_group_arns_suffixes" {
+  value = module.alb-front.target_group_arn_suffixes
 }
 
-output "aws_app_alb_target_group_names" {
-  value = module.alb-app.target_group_names
+output "aws_front_alb_target_group_names" {
+  value = module.alb-front.target_group_names
 }
 
 
