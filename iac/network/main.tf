@@ -35,16 +35,13 @@ module "sg-alb" {
   ]
 
   egress_with_cidr_blocks = [
-      {
-        rule = "https-443-tcp"
-        cidr_blocks = "0.0.0.0/0"
-      },  
-      {
-        rule = "http-80-tcp"
-        cidr_blocks = "0.0.0.0/0"
-      }  
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = "0.0.0.0/0"
+    }
   ]
-
  
 }
 
@@ -69,9 +66,11 @@ module "sg-app" {
 
     computed_egress_with_source_security_group_id = [
       {
-        rule = "http-8080-tcp"
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
         source_security_group_id = module.sg-alb.security_group_id
-      }           
+      }          
     ]
 
     number_of_computed_egress_with_source_security_group_id = 1      
@@ -98,7 +97,9 @@ module "sg-db" {
      
     computed_egress_with_source_security_group_id = [
         {
-          rule = "mysql-tcp"
+          from_port   = 0
+          to_port     = 0
+          protocol    = "-1"
           source_security_group_id = module.sg-app.security_group_id
         }       
       ]
@@ -127,7 +128,9 @@ module "sg-cache" {
 
     computed_egress_with_source_security_group_id = [
         {
-          rule = "memcached-tcp"
+          from_port   = 0
+          to_port     = 0
+          protocol    = "-1"
           source_security_group_id = module.sg-app.security_group_id
         }       
       ]
@@ -157,7 +160,9 @@ module "sg-message" {
 
     computed_egress_with_source_security_group_id = [
         {
-          rule = "rabbitmq-5672-tcp"
+          from_port   = 0
+          to_port     = 0
+          protocol    = "-1"
           source_security_group_id = module.sg-app.security_group_id
         }       
       ]
