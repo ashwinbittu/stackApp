@@ -13,13 +13,18 @@ module "vpc" {
   aws_vpc_instance_tenancy = var.aws_vpc_instance_tenancy
 }
 
+data "aws_security_group" "default" {
+  name   = "default"
+  vpc_id = module.vpc.aws_vpc_id 
+}
+
 module "sg-alb" {
   source = "app.terraform.io/radammcorp/sg/aws"
   #aws_region = var.aws_region
   app_env   = var.app_env
   app_name   = var.app_name  
   app_id   = var.app_id    
-  aws_vpc_id = module.vpc.aws_vpc_id
+  aws_vpc_id = module.vpc.aws_vpc_id 
   name   = "sgalb"
   description = "security group for load balancer"
 
@@ -31,6 +36,12 @@ module "sg-alb" {
       {
         rule = "http-80-tcp"
         cidr_blocks = "0.0.0.0/0"
+      },
+      {
+        from_port                = 0
+        to_port                  = 0
+        protocol                 = -1
+        source_security_group_id = data.aws_security_group.default.id
       }         
   ]
 
