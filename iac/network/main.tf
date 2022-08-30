@@ -275,7 +275,7 @@ module "public-route53" {
         }
       }
   ]
-  aws_vpc_id = module.vpc.aws_vpc_id
+  vpc_id = module.vpc.aws_vpc_id
 }
 
 module "private-route53" {
@@ -289,7 +289,7 @@ module "private-route53" {
   createrecord = false
   zone_name = var.aws_route53_private_zone_name
   full_name_override = true 
-  aws_vpc_id = module.vpc.aws_vpc_id
+  vpc_id = module.vpc.aws_vpc_id
 }
 
 
