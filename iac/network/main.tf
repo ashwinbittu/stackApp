@@ -246,37 +246,52 @@ module "alb-front" {
 
 }
 
-/*
-
-#data "aws_route53_zone" "selected" {
-#  name         = var.aws_route53_zone_name
-#  #private_zone = false
-#}
-
-#module "route53" {
-#  source = "app.terraform.io/radammcorp/route53/aws"
-#  aws_region = var.aws_region
-#  app_env   = var.app_env
-#  app_name  = var.app_name  
-#  app_id   = var.app_id  
-#  aws_route53_zone_id = data.aws_route53_zone.selected.zone_id
-#  aws_route53_record_name = var.aws_route53_record_name
-
-#  # Adding to "dulastack." needs to be revied with service owner 
-#  #aws_elb_dns_name = var.aws_elb_dns_name == "" ? "dummy-elb.us-east-1.elb.amazonaws.com" : "dualstack.${var.aws_elb_dns_name}"
-#  aws_elb_dns_name = module.elb.aws_elb_dns_name #"dualstack.${module.elb.aws_elb_dns_name}"
-
-#  # Passing defalut us-east-1 zone id to avoid apply error, logic needs to change later 
-#  #aws_elb_zone_id = var.aws_elb_zone_id == "" ? "Z35SXDOTRQ7X7K" : var.aws_elb_zone_id
-#  aws_elb_zone_id = module.elb.aws_elb_zone_id
 
 
-#  repave_strategy = var.repave_strategy 
-#  aws_route53_zone_name = var.aws_route53_zone_name
-#  aws_vpc_id = module.vpc.aws_vpc_id
-#}
+data "aws_route53_zone" "pubzone" {
+  name  = var.aws_route53_public_zone_name
+}
 
-*/
+module "public-route53" {
+  source = "app.terraform.io/radammcorp/route53/aws"
+  aws_region = var.aws_region
+  app_env   = var.app_env
+  app_name  = var.app_name  
+  app_id   = var.app_id
+  
+  createzone = false
+  createrecord = true
+  zone_name = var.aws_route53_public_zone_name
+  zone_id = var.data.aws_route53_zone.pubzone.zone_id
+
+  records = [ 
+      {
+        name = var.aws_route53_public_record_name
+        full_name_override = true
+        type = "A"
+        alias = {
+          name    = module.alb-front.lb_dns_name
+          zone_id = module.alb-front.lb_zone_id
+        }
+      }
+  ]
+  aws_vpc_id = module.vpc.aws_vpc_id
+}
+
+module "private-route53" {
+  source = "app.terraform.io/radammcorp/route53/aws"
+  aws_region = var.aws_region
+  app_env   = var.app_env
+  app_name  = var.app_name  
+  app_id   = var.app_id  
+
+  createzone = true
+  createrecord = false
+  zone_name = var.aws_route53_private_zone_name
+  full_name_override = true 
+  aws_vpc_id = module.vpc.aws_vpc_id
+}
+
 
 
 /*
