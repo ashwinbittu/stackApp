@@ -270,7 +270,7 @@ module "public-route53" {
   }
 
   #zone_name = var.aws_route53_public_zone_id
-  zone_name = keys(zones.route53_zone_zone_id)[0]
+  zone_name = keys(zones.zone_id)[0]
 
   records = [ 
       {
