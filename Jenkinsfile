@@ -100,20 +100,6 @@ pipeline {
                             
                             """
                         }
-                        /*rtUpload (
-                            buildName: JOB_NAME,
-                            buildNumber: BUILD_NUMBER,
-                            serverId: '${artifactrepocreds}', // Obtain an Artifactory server instance, defined in Jenkins --> Manage:
-                            spec: '''{
-                                    "files": [
-                                        {
-                                        "pattern": "target/${appname}-${appver}.war",
-                                        "target": "/${artifactrepo}/${BUILD_NUMBER}",
-                                        "recursive": "false"
-                                        }
-                                    ]
-                                }'''
-                        )*/
                     }
         }
 
