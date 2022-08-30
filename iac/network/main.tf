@@ -246,9 +246,7 @@ module "alb-front" {
 
 }
 
-
-
-data "aws_route53_zone" "pubzone" {
+data "aws_route53_zone" "selected" {
   name  = var.aws_route53_public_zone_name
 }
 
@@ -262,8 +260,8 @@ module "public-route53" {
   createzone = false
   createrecord = true
 
-  zone_id = data.aws_route53_zone.pubzone.zone_id
-  zone_name = var.aws_route53_public_zone_name
+  zone_id = data.aws_route53_zone.selected.zone_id
+  zone_name =  data.aws_route53_zone.selected.zone_name
 
   records = [ 
       {
