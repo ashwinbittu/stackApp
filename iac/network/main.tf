@@ -254,7 +254,7 @@ module "public-route53" {
   app_name  = var.app_name  
   app_id   = var.app_id
   
-  createzone = false
+  //createzone = false
   createrecord = true
   
 
@@ -269,7 +269,8 @@ module "public-route53" {
       }
   }*/
 
-  zone_name = var.aws_route53_public_zone_name
+  zone_name = var.aws_route53_public_zone_id
+  #zone_name = keys(zones.route53_zone_zone_id)[0]
 
   records = [ 
       {
