@@ -258,7 +258,7 @@ module "public-route53" {
   createrecord = true
   
 
-  zones = {
+  /*zones = {
       "public-vpc" = {
             domain_name = var.aws_route53_public_zone_name
             vpc = [
@@ -267,10 +267,11 @@ module "public-route53" {
               }
             ]
       }
-  }
+  }*/
 
-  #zone_name = var.aws_route53_public_zone_id
-  zone_name = keys(zones.zone_id)[0]
+  zone_name = var.aws_route53_public_zone_id
+  zone_id = var.aws_route53_public_zone_id
+  private_zone = false
 
   records = [ 
       {
