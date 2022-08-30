@@ -246,7 +246,6 @@ module "alb-front" {
 
 }
 
-/*
 
 module "public-route53" {
   source = "app.terraform.io/radammcorp/route53/aws"
@@ -258,7 +257,16 @@ module "public-route53" {
   createzone = false
   createrecord = true
 
-  zone_name =  var.aws_route53_public_zone_name
+  zones = {
+      "public-vpc" = {
+            domain_name = var.aws_route53_public_zone_name
+            vpc = [
+              {
+                vpc_id =  module.vpc.aws_vpc_id
+              }
+            ]
+      }
+  }
 
   records = [ 
       {
@@ -271,10 +279,10 @@ module "public-route53" {
         }
       }
   ]
-  vpc_id = module.vpc.aws_vpc_id
+
 }
 
-*/
+
 
 module "private-route53" {
   source = "app.terraform.io/radammcorp/route53/aws"
@@ -288,7 +296,7 @@ module "private-route53" {
   createrecord = false  
 
   zones = {
-      "private-vpc.terraform-aws-modules-example.com" = {
+      "private-vpc" = {
             domain_name = var.aws_route53_private_zone_name
             vpc = [
               {
