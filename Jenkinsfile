@@ -1,5 +1,3 @@
-infracreatemode = false
-
 pipeline {
 
 	agent any
@@ -10,13 +8,14 @@ pipeline {
         artficatreporeg = "https://ashwinbittu.jfrog.io"
         artifactrepo = "/stackapp-repo"
         artifactrepocreds = 'jfrog-artifact-saas'
+        infracreatemode = false
     }
 
     stages{
 
         stage('BUILD'){
             when{
-                expression { infracreatemode = true }
+                environment name: 'infracreatemode', value: 'true'
             }            
             steps {
                 sh 'mvn clean install -DskipTests'
@@ -31,7 +30,7 @@ pipeline {
 
         stage('UNIT TEST'){
             when{
-                expression { infracreatemode = true }
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                 sh 'mvn test'
@@ -40,7 +39,7 @@ pipeline {
 
         stage('INTEGRATION TEST'){
             when{
-                expression { infracreatemode = true }
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                 sh 'mvn verify -DskipUnitTests'
@@ -49,7 +48,7 @@ pipeline {
 
         stage ('CODE ANALYSIS WITH CHECKSTYLE'){
             when{
-                expression { infracreatemode = true }
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                 sh 'mvn checkstyle:checkstyle'
@@ -87,7 +86,7 @@ pipeline {
 
         stage ('Upload App Image to Artifactory') {
             when{
-                expression { infracreatemode = true }
+                environment name: 'infracreatemode', value: 'true'
             }              
                     steps {
                         withCredentials([string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
@@ -119,7 +118,7 @@ pipeline {
 
 	    stage ('Backing AMIs')  {
             when {
-                expression { infracreatemode = true }
+                environment name: 'infracreatemode', value: 'true'
             }
 	        steps {
                 //checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/ashwinbittu/stackApp-infra.git']]])
@@ -169,7 +168,7 @@ pipeline {
 
         stage('Network Infra Creation Using Terraform'){
             when{
-                expression { infracreatemode = true }
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -207,7 +206,7 @@ pipeline {
 
         stage('Application Infra Creation Using Terraform'){
             when{
-                expression { infracreatemode = true }
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -250,7 +249,7 @@ pipeline {
 
         stage('Database Infra Creation Using Terraform'){
             when{
-                expression { infracreatemode = true }
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -293,7 +292,7 @@ pipeline {
 
         stage('Caching Infra Creation Using Terraform'){
             when{
-                expression { infracreatemode = true }
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -336,7 +335,7 @@ pipeline {
 
         stage('Messaging Infra Creation Using Terraform'){
             when{
-                expression { infracreatemode = true }
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -379,7 +378,7 @@ pipeline {
 
         stage('All Infra Destroy Using Terraform'){
             when{
-                infracreatemode == false
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
