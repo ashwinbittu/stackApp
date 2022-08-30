@@ -97,6 +97,8 @@ output "aws_front_alb_target_group_names" {
   value = module.alb-front.target_group_names
 }
 
+/*
+
 output "route53_zone_zone_id" {
   description = "Zone ID of Route53 zone"
   value       = module.private-route53.route53_zone_zone_id
@@ -113,7 +115,7 @@ output "route53_zone_name" {
 }
 
 
-/*
+
 
 output "aws_db_alb_id" {
   value = module.alb-db.lb_id
