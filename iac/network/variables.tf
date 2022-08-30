@@ -39,6 +39,27 @@ variable "key_name" {
   default = ""
 }
 
+
+
+
+variable "aws_route53_public_zone_name" {
+  default = ""
+}
+
+variable "aws_route53_public_zone_id" {
+  default = ""
+}
+
+variable "aws_route53_public_record_name" {
+  default = ""
+}
+
+variable "aws_route53_private_zone_name" {
+  default = ""
+}
+
+
+
 /*
 
 variable "aws_region" {
