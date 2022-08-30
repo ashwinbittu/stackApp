@@ -8,7 +8,7 @@ pipeline {
         artficatreporeg = "https://ashwinbittu.jfrog.io"
         artifactrepo = "/stackapp-repo"
         artifactrepocreds = 'jfrog-artifact-saas'
-        infracreatemode = true
+        infracreatemode = false
     }
 
     stages{
@@ -143,18 +143,18 @@ pipeline {
                             #Mesg/Rabbitmq
                             /usr/bin/packer validate -var "app_layer=msg" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$msg_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl
                             /usr/bin/packer build    -var "app_layer=msg" -var "source_ami=$ubuntu_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$msg_userscript" -var "ssh_username=$ubuntu_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$ubuntu_owners"  template.ubuntu.pkr.hcl
-                            cp manifest.json db_img_manifest.json
+                            cp manifest.json message_img_manifest.json
 
 
                             #DB/Maria-MySQL Bake
                             /usr/bin/packer validate -var "app_layer=db" -var "source_ami=$amzlnx_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$db_userscript" -var "ssh_username=$amzlnx_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$amzlnx_owners"  template.amzlinx2.pkr.hcl
                             /usr/bin/packer build    -var "app_layer=db" -var "source_ami=$amzlnx_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$db_userscript" -var "ssh_username=$amzlnx_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$amzlnx_owners"  template.amzlinx2.pkr.hcl
-                            cp manifest.json cache_img_manifest.json
+                            cp manifest.json db_img_manifest.json
 
                             #Cache/Memcache
                             /usr/bin/packer validate -var "app_layer=cache" -var "source_ami=$amzlnx_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$cache_userscript" -var "ssh_username=$amzlnx_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$amzlnx_owners"  template.amzlinx2.pkr.hcl
                             /usr/bin/packer build    -var "app_layer=cache" -var "source_ami=$amzlnx_source_ami" -var "app_name=$app_name_stackapp" -var "instance_type=$instance_type" -var "script=$cache_userscript" -var "ssh_username=$amzlnx_ssh_username" -var "root-device-type=$ubuntu_root_device_type" -var "virtualization-type=$ubuntu_virtualization_type" -var "owners=$amzlnx_owners"  template.amzlinx2.pkr.hcl
-                            cp manifest.json message_img_manifest.json
+                            cp manifest.json cache_img_manifest.json
 
 
                         
@@ -404,8 +404,8 @@ pipeline {
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
                                         cd stackapppipelines; chmod 777 *.*;
-                                        ./manageInfra.sh destroy message
-                                        ./manageInfra.sh destroy cache
+                                        #./manageInfra.sh destroy message
+                                        #./manageInfra.sh destroy cache
                                         ./manageInfra.sh destroy database
                                         ./manageInfra.sh destroy application
                                         ./manageInfra.sh destroy network   
