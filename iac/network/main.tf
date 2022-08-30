@@ -261,8 +261,8 @@ module "public-route53" {
   createzone = false
   createrecord = true
 
-  zone_id = data.aws_route53_zone.selected.zone_id
-  zone_name =  data.aws_route53_zone.selected.name
+  #zone_id = data.aws_route53_zone.selected.zone_id
+  zone_name =  var.aws_route53_public_zone_name
 
   records = [ 
       {
