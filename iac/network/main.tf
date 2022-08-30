@@ -279,15 +279,20 @@ module "public-route53" {
 module "private-route53" {
   source = "app.terraform.io/radammcorp/route53/aws"
   
-  app_env   = var.app_env
-  app_name  = var.app_name  
-  app_id   = var.app_id  
-
   createzone = true
-  createrecord = false
-  zone_name = var.aws_route53_private_zone_name
-  full_name_override = true 
-  vpc_id = module.vpc.aws_vpc_id
+  createrecord = false  
+
+  zones = {
+      "private-vpc.terraform-aws-modules-example.com" = {
+            domain_name = var.aws_route53_private_zone_name
+            vpc = [
+              {
+                vpc_id =  module.vpc.aws_vpc_id
+              }
+            ]
+      }
+  }    
+  
 }
 
 
