@@ -248,6 +248,7 @@ module "alb-front" {
 
 data "aws_route53_zone" "selected" {
   name  = var.aws_route53_public_zone_name
+  private_zone = false
 }
 
 module "public-route53" {
@@ -261,7 +262,7 @@ module "public-route53" {
   createrecord = true
 
   zone_id = data.aws_route53_zone.selected.zone_id
-  zone_name =  data.aws_route53_zone.selected.zone_name
+  zone_name =  data.aws_route53_zone.selected.name
 
   records = [ 
       {
