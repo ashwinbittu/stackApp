@@ -246,7 +246,7 @@ module "alb-front" {
 
 }
 
-
+/*
 module "public-route53" {
   source = "app.terraform.io/radammcorp/route53/aws"
  
@@ -286,6 +286,7 @@ module "public-route53" {
   ]
 
 }
+*/
 
 
 
