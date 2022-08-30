@@ -269,7 +269,7 @@ module "public-route53" {
       }
   }*/
 
-  zone_name = var.aws_route53_public_zone_id
+  #zone_name = var.aws_route53_public_zone_id
   zone_id = var.aws_route53_public_zone_id
   private_zone = false
 
