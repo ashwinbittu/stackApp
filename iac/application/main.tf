@@ -52,7 +52,7 @@ module "app-asg" {
   app_env   = var.app_env 
   repave_strategy = var.repave_strategy  
   layer = "app"
-  snsemail = "ashwin.bittu@gmail.com"
+  snsemail = "snsemaiddl@notif.com"
 
   desired_capacity          = 1
   min_size                  = 1
