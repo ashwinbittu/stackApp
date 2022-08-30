@@ -254,7 +254,7 @@ data "aws_route53_zone" "pubzone" {
 
 module "public-route53" {
   source = "app.terraform.io/radammcorp/route53/aws"
-  aws_region = var.aws_region
+ 
   app_env   = var.app_env
   app_name  = var.app_name  
   app_id   = var.app_id
@@ -280,7 +280,7 @@ module "public-route53" {
 
 module "private-route53" {
   source = "app.terraform.io/radammcorp/route53/aws"
-  aws_region = var.aws_region
+  
   app_env   = var.app_env
   app_name  = var.app_name  
   app_id   = var.app_id  
