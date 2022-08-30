@@ -246,10 +246,10 @@ module "alb-front" {
 
 }
 
-data "aws_route53_zone" "selected" {
-  name  = var.aws_route53_public_zone_name
-  private_zone = false
-}
+#data "aws_route53_zone" "selected" {
+#  name  = var.aws_route53_public_zone_name
+#  private_zone = false
+#}
 
 module "public-route53" {
   source = "app.terraform.io/radammcorp/route53/aws"
