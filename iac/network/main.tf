@@ -278,7 +278,12 @@ module "public-route53" {
 
 module "private-route53" {
   source = "app.terraform.io/radammcorp/route53/aws"
+
+  app_env   = var.app_env
+  app_name  = var.app_name  
+  app_id   = var.app_id
   
+
   createzone = true
   createrecord = false  
 
