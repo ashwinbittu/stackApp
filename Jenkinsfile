@@ -8,7 +8,7 @@ pipeline {
         artficatreporeg = "https://ashwinbittu.jfrog.io"
         artifactrepo = "/stackapp-repo"
         artifactrepocreds = 'jfrog-artifact-saas'
-        infracreatemode = false
+        infracreatemode = true
     }
 
     stages{
@@ -404,7 +404,12 @@ pipeline {
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
                                         cd stackapppipelines; chmod 777 *.*;
-                                        ./manageInfra.sh destroy
+                                        ./manageInfra.sh destroy message
+                                        ./manageInfra.sh destroy cache
+                                        ./manageInfra.sh destroy database
+                                        ./manageInfra.sh destroy application
+                                        ./manageInfra.sh destroy network   
+
 
                                     '''   
                                 }  
