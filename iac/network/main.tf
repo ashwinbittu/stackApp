@@ -256,8 +256,9 @@ module "public-route53" {
   
   createzone = false
   createrecord = true
+  
 
-  zones = {
+  /*zones = {
       "public-vpc" = {
             domain_name = var.aws_route53_public_zone_name
             vpc = [
@@ -266,7 +267,9 @@ module "public-route53" {
               }
             ]
       }
-  }
+  }*/
+
+  zone_name = var.aws_route53_public_zone_name
 
   records = [ 
       {
