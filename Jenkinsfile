@@ -8,7 +8,7 @@ pipeline {
         artficatreporeg = "https://ashwinbittu.jfrog.io"
         artifactrepo = "/stackapp-repo"
         artifactrepocreds = 'jfrog-artifact-saas'
-        infracreatemode = false
+        infracreatemode = true
     }
 
     stages{
@@ -60,11 +60,14 @@ pipeline {
             }
         }
 
-        /*
+       /* 
         stage('CODE ANALYSIS with SONARQUBE') {
 		  environment {
              scannerHome = tool 'sonarqscan'
           }
+          when{
+                environment name: 'infracreatemode', value: 'false'
+          }          
           steps {
              withSonarQubeEnv('sonar') {
                    sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=radammcorp \
@@ -82,18 +85,18 @@ pipeline {
             }
           }
         }
-        */
+        
 
         stage ('Upload App Image to Artifactory') {
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
                     steps {
                         withCredentials([string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
                             sh """
                             echo "HH"
                             
-                            #curl -H "X-JFrog-Art-Api:$ART_TOKEN" -T target/stackapp-v2.war "https://ashwinbittu.jfrog.io/artifactory/stackapp-repo/${BUILD_NUMBER}/stackapp-v2.war"
+                            curl -H "X-JFrog-Art-Api:$ART_TOKEN" -T target/stackapp-v2.war "https://ashwinbittu.jfrog.io/artifactory/stackapp-repo/${BUILD_NUMBER}/stackapp-v2.war"
                             
                             """
                         }
@@ -114,11 +117,11 @@ pipeline {
                     }
         }
 
-       
+       */
 
 	    stage ('Backing AMIs')  {
             when {
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }
 	        steps {
                 //checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/ashwinbittu/stackApp-infra.git']]])
@@ -206,7 +209,7 @@ pipeline {
 
         stage('Application Infra Creation Using Terraform'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -249,7 +252,7 @@ pipeline {
 
         stage('Database Infra Creation Using Terraform'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -292,7 +295,7 @@ pipeline {
 
         stage('Caching Infra Creation Using Terraform'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -335,7 +338,7 @@ pipeline {
 
         stage('Messaging Infra Creation Using Terraform'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
