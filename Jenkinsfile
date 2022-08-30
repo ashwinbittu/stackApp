@@ -1,4 +1,4 @@
-def app_ami_id=""
+def infracreatemode = false
 
 pipeline {
 
@@ -15,6 +15,9 @@ pipeline {
     stages{
 
         stage('BUILD'){
+            when{
+                expression { infracreatemode = true }
+            }            
             steps {
                 sh 'mvn clean install -DskipTests'
             }
@@ -27,18 +30,27 @@ pipeline {
         }
 
         stage('UNIT TEST'){
-                steps {
-                    sh 'mvn test'
-                }
+            when{
+                expression { infracreatemode = true }
+            }              
+            steps {
+                sh 'mvn test'
+            }
             }
 
         stage('INTEGRATION TEST'){
-                steps {
-                    sh 'mvn verify -DskipUnitTests'
-                }
+            when{
+                expression { infracreatemode = true }
+            }              
+            steps {
+                sh 'mvn verify -DskipUnitTests'
+            }
             }
 
         stage ('CODE ANALYSIS WITH CHECKSTYLE'){
+            when{
+                expression { infracreatemode = true }
+            }              
             steps {
                 sh 'mvn checkstyle:checkstyle'
             }
@@ -74,6 +86,9 @@ pipeline {
         */
 
         stage ('Upload App Image to Artifactory') {
+            when{
+                expression { infracreatemode = true }
+            }              
                     steps {
                         withCredentials([string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
                             sh """
@@ -103,6 +118,9 @@ pipeline {
        
 
 	    stage ('Backing AMIs')  {
+            when {
+                expression { infracreatemode = true }
+            }
 	        steps {
                 //checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/ashwinbittu/stackApp-infra.git']]])
                 
@@ -150,6 +168,9 @@ pipeline {
         }
 
         stage('Network Infra Creation Using Terraform'){
+            when{
+                expression { infracreatemode = true }
+            }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
 
@@ -185,6 +206,9 @@ pipeline {
         }
 
         stage('Application Infra Creation Using Terraform'){
+            when{
+                expression { infracreatemode = true }
+            }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
 
@@ -225,6 +249,9 @@ pipeline {
         }
 
         stage('Database Infra Creation Using Terraform'){
+            when{
+                expression { infracreatemode = true }
+            }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
 
@@ -265,6 +292,9 @@ pipeline {
         }
 
         stage('Caching Infra Creation Using Terraform'){
+            when{
+                expression { infracreatemode = true }
+            }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
 
@@ -305,6 +335,9 @@ pipeline {
         }   
 
         stage('Messaging Infra Creation Using Terraform'){
+            when{
+                expression { infracreatemode = true }
+            }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
 
@@ -343,6 +376,43 @@ pipeline {
                     }
             }
         }             
+
+        stage('All Infra Destroy Using Terraform'){
+            when{
+                expression { infracreatemode = false }
+            }              
+            steps {
+                    withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
+
+                        withCredentials([usernamePassword(credentialsId: 'github-person-acces-token', usernameVariable: 'REPO_API_USER', passwordVariable: 'REPO_API_TOKEN')]){
+
+                                withCredentials([string(credentialsId: 'TFE_TOKEN', variable: 'TFE_TOKEN'), string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
+
+                                    sh '''
+                                        
+                                        export TFE_TOKEN=$TFE_TOKEN 
+                                        export TFE_ORG=$TFE_ORG
+                                        export TFE_ADDR=$TFE_ADDR
+                                        export REPO_API_TOKEN=$REPO_API_TOKEN 
+                                        export REPO_FID=$REPO_API_USER
+                                        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                                        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                                        export AWS_REGION=$AWS_DEFAULT_REGION
+                                        export targetRegion=$AWS_DEFAULT_REGION
+                                        export env=$APP_ENV_DEV
+                                        export appname=$app_name_stackapp
+
+                                        rm -rf stackapppipelines
+                                        git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
+                                        cd stackapppipelines; chmod 777 *.*;
+                                        ./manageInfra.sh destroy
+
+                                    '''   
+                                }  
+                        }     
+                    }
+            }
+        }
 
     }
 
