@@ -379,7 +379,7 @@ pipeline {
 
         stage('All Infra Destroy Using Terraform'){
             when{
-                expression { infracreatemode false }
+                expression { infracreatemode = 'false' }
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
