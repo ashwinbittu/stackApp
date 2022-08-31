@@ -252,7 +252,7 @@ locals {
 }
 
 module "public-route53T-zones" {
-  source = "app.terraform.io/radammcorp/route53T/aws"
+  source = "app.terraform.io/radammcorp/route53-zones/aws"
   zones = {
       "public-vpc" = {
             domain_name = var.aws_route53_public_zone_name
@@ -266,7 +266,7 @@ module "public-route53T-zones" {
 }
 
 module "public-route53T-records" {
-  source = "app.terraform.io/radammcorp/route53T/aws"
+  source = "app.terraform.io/radammcorp/route53-records/aws"
   zone_name = local.zone_name
   records = [ 
       {
