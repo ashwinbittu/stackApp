@@ -1,15 +1,15 @@
-output "db-instance-ids" {
-    value = data.aws_instances.db-asg-instances.ids
+output "db-instance-private_ips" {
+    value = data.aws_instances.db-asg-instances.private_ips
 }
 
 /*
 
-output "message-instance-ids" {
-    value = data.aws_instances.message-asg-instances.ids
+output "message-instance-private_ips" {
+    value = data.aws_instances.message-asg-instances.private_ips
 }
 
-output "cache-instance-ids" {
-    value = data.aws_instances.cache-asg-instances.ids
+output "cache-instance-private_ips" {
+    value = data.aws_instances.cache-asg-instances.private_ips
 }
 
 */
