@@ -46,18 +46,6 @@ variable "instance_type" {
 }
 
 
-variable "aws_route53_private_msg_record" {
-  default = ""
-}
-
-variable "aws_route53_private_db_record" {
-  default = ""
-}
-
-variable "aws_route53_private_cache_record" {
-  default = ""
-}
-
 variable "aws_route53_private_zone_name" {
   default = ""
 }

@@ -93,16 +93,7 @@ module "app-asg" {
     }
 }
 
-data "aws_instances" "asg-instances" {
-  instance_tags = {
-    app_id   = var.app_id 
-    app_name   = var.app_name 
-    app_env   = var.app_env 
-    layer = "app"
-  }
 
-  instance_state_names = ["running", "stopped"]
-}
 
 
 
