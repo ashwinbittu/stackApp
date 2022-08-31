@@ -362,7 +362,7 @@ pipeline {
 
         stage('Route53 Infra Creation'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -431,7 +431,7 @@ pipeline {
                                         ./manageInfra.sh destroy cache
                                         ./manageInfra.sh destroy database
                                         ./manageInfra.sh destroy application
-                                        ./manageInfra.sh destroy network   
+                                        ./manageInfra.sh destroy network      
 
 
                                     '''   
