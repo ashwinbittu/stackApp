@@ -24,6 +24,12 @@ module "db-launch-template" {
   instance_type = var.instance_type
   instdevice_name = var.instdevice_name 
   user_datascript =  var.user_datascript
+  tags = {
+    app_id   = var.app_id 
+    app_name   = var.app_name 
+    app_env   = var.app_env 
+    layer = "database"
+  } 
 
   /*
  
@@ -51,8 +57,8 @@ module "db-asg" {
   app_name   = var.app_name 
   app_env   = var.app_env 
   repave_strategy = var.repave_strategy  
-  layer = "cache"
-  snsemail = "ashwin.bittu@gmail.com"
+  layer = "database"
+  snsemail = "snsemaiddl@notif.com"
 
   desired_capacity          = 1
   min_size                  = 1
@@ -87,6 +93,68 @@ module "db-asg" {
         }
       }
     }
+  tags = {
+    app_id   = var.app_id 
+    app_name   = var.app_name 
+    app_env   = var.app_env 
+    layer = "database"
+  } 
+}
+
+data "aws_instances" "asg-instances" {
+  instance_tags = {
+    app_id   = var.app_id 
+    app_name   = var.app_name 
+    app_env   = var.app_env 
+    layer = "database"
+  }
+
+  instance_state_names = ["running", "stopped"]
+}
+
+module "private-route53-records" {
+  source = "app.terraform.io/radammcorp/route53-records/aws"
+  zone_name = var.aws_route53_private_zone_name
+  
+  records = [ 
+      {
+        name = var.aws_route53_private_db_record
+        full_name_override = true        
+        type = "A"
+        records = [data.aws_instances.asg-instances.ids]
+      }    
+  ]
 
 }
 
+/*
+
+module "private-route53-records" {
+  source = "app.terraform.io/radammcorp/route53-records/aws"
+  zone_name = var.aws_route53_private_zone_name
+  
+  records = [ 
+      {
+        name = var.aws_route53_private_cache_record
+        full_name_override = true        
+        type = "A"
+        ttl  = 300
+        records = [data.aws_instances.asg-instances.ids]
+      },
+      {
+        name = var.aws_route53_private_db_record
+        full_name_override = true        
+        type = "A"
+        records = [data.aws_instances.asg-instances.ids]
+      },   
+      {
+        name = var.aws_route53_private_msg_record
+        full_name_override = true        
+        type = "A"
+        records = [data.aws_instances.asg-instances.ids]
+      }     
+  ]
+
+}
+
+*/

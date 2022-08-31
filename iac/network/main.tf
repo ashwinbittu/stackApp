@@ -246,25 +246,6 @@ module "alb-front" {
 
 }
 
-/*
-locals {
-  zone_name = sort(keys(module.public-route53-zone.route53_zone_zone_id))[0]
-}
-
-module "public-route53-zone" {
-  source = "app.terraform.io/radammcorp/route53-zones/aws"
-  zones = {
-      "public-vpc" = {
-            domain_name = var.aws_route53_public_zone_name
-            vpc = [
-              {
-                vpc_id =  module.vpc.aws_vpc_id
-              }
-            ]
-  }
-}
-*/
-
 module "public-route53-records" {
   source = "app.terraform.io/radammcorp/route53-records/aws"
   zone_name = var.aws_route53_public_zone_name
@@ -280,7 +261,6 @@ module "public-route53-records" {
       }
   ]
 
-  #depends_on = [module.public-route53-zone]
 }
 
 module "private-route53-zone" {
@@ -297,8 +277,6 @@ module "private-route53-zone" {
   }    
   
 }
-
-
 
 /*
 
