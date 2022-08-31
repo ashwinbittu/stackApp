@@ -194,7 +194,7 @@ pipeline {
 
         stage('Application Infra Creation Using Terraform'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
