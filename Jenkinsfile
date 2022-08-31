@@ -15,7 +15,7 @@ pipeline {
 
         stage('BUILD'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }            
             steps {
                 sh 'mvn clean install -DskipTests'
@@ -30,7 +30,7 @@ pipeline {
 
         stage('UNIT TEST'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                 sh 'mvn test'
@@ -39,7 +39,7 @@ pipeline {
 
         stage('INTEGRATION TEST'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                 sh 'mvn verify -DskipUnitTests'
@@ -48,7 +48,7 @@ pipeline {
 
         stage ('CODE ANALYSIS WITH CHECKSTYLE'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                 sh 'mvn checkstyle:checkstyle'
@@ -157,7 +157,7 @@ pipeline {
 
         stage('Network Infra Creation Using Terraform'){
             when{
-                environment name: 'infracreatemode', value: 'false'
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -184,7 +184,6 @@ pipeline {
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
                                         cd stackapppipelines; chmod 777 *.*;
                                         ./manageInfra.sh create network
-                                        #./manageInfra.sh destroy 
 
                                     '''   
                                 }  
@@ -367,7 +366,7 @@ pipeline {
 
         stage('All Infra Destroy Using Terraform'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
