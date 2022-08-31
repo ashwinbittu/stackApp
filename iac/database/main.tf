@@ -126,8 +126,9 @@ module "private-route53-records" {
         name = var.aws_route53_private_db_record
         full_name_override = true        
         type = "A"
-        records = ["10.1.1.1"]
-        //records = [data.aws_instances.asg-instances.ids]
+        ttl     = "300"
+        //records = ["10.1.1.1"]
+        records = [data.aws_instances.asg-instances.ids]
       }    
   ]
 
