@@ -13,7 +13,7 @@ pipeline {
 
     stages{
 
-        stage('BUILD'){
+        stage('Build App'){
             when{
                 environment name: 'infracreatemode', value: 'false'
             }            
@@ -28,7 +28,7 @@ pipeline {
             }
         }
 
-        stage('UNIT TEST'){
+        stage('Unit Testing Of App'){
             when{
                 environment name: 'infracreatemode', value: 'false'
             }              
@@ -37,7 +37,7 @@ pipeline {
             }
             }
 
-        stage('INTEGRATION TEST'){
+        stage('Integration Testing of App'){
             when{
                 environment name: 'infracreatemode', value: 'false'
             }              
@@ -46,7 +46,7 @@ pipeline {
             }
             }
 
-        stage ('CODE ANALYSIS WITH CHECKSTYLE'){
+        stage ('Code Analysis With Checkstyle'){
             when{
                 environment name: 'infracreatemode', value: 'false'
             }              
@@ -61,7 +61,7 @@ pipeline {
         }
 
        /* 
-        stage('CODE ANALYSIS with SONARQUBE') {
+        stage('Code Analysis With Sonarqube') {
 		  environment {
              scannerHome = tool 'sonarqscan'
           }
@@ -107,7 +107,7 @@ pipeline {
 
 	    stage ('Backing AMIs')  {
             when {
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }
 	        steps {
                 //checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/ashwinbittu/stackApp-infra.git']]])
@@ -220,7 +220,7 @@ pipeline {
                                         cd stackApp/iac/packer
                                         export app_ami_id=$(jq -r '.builds[-1].artifact_id' app_img_manifest.json | cut -d ":" -f2)
                                         echo "AMI_ID-APP-->>"$app_ami_id
-                                        #export app_ami_id="ami-0ab6cd77655cb413c"
+                                        export app_ami_id="ami-0e3c4f1e87ed81661"
 
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
@@ -262,7 +262,7 @@ pipeline {
                                         cd stackApp/iac/packer
                                         export db_ami_id=$(jq -r '.builds[-1].artifact_id' db_img_manifest.json | cut -d ":" -f2)                                        
                                         echo "AMI_ID-DB-->>"$db_ami_id                                        
-                                        #export db_ami_id="ami-03f15496b423fc91e"
+                                        export db_ami_id="ami-0302e41d1e1b68dec"
                                         
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
@@ -304,7 +304,7 @@ pipeline {
                                         cd stackApp/iac/packer                                       
                                         export cache_ami_id=$(jq -r '.builds[-1].artifact_id' cache_img_manifest.json | cut -d ":" -f2)                                        
                                         echo "AMI_ID-CACHE-->>"$cache_ami_id                                        
-                                        #export cache_ami_id="ami-0da28db37fec7611f"
+                                        export cache_ami_id="ami-0e1727be7345e53ae"
 
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
@@ -347,7 +347,7 @@ pipeline {
                                         cd stackApp/iac/packer                                       
                                         export mesg_ami_id=$(jq -r '.builds[-1].artifact_id' message_img_manifest.json | cut -d ":" -f2)                                        
                                         echo "AMI_ID-MSG-->>"$export                                        
-                                        #export mesg_ami_id="ami-0da8f4cc59749f64d"
+                                        export mesg_ami_id="ami-033d5ea44c7d47269"
 
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
