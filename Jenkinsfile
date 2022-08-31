@@ -301,9 +301,9 @@ pipeline {
                                         export env=$APP_ENV_DEV
                                         export appname=$app_name_stackapp
 
-                                        cd stackApp/iac/packer                                       
-                                        export cache_ami_id=$(jq -r '.builds[-1].artifact_id' cache_img_manifest.json | cut -d ":" -f2)                                        
-                                        echo "AMI_ID-CACHE-->>"$cache_ami_id                                        
+                                        #cd stackApp/iac/packer                                       
+                                        #export cache_ami_id=$(jq -r '.builds[-1].artifact_id' cache_img_manifest.json | cut -d ":" -f2)                                        
+                                        #echo "AMI_ID-CACHE-->>"$cache_ami_id                                        
                                         export cache_ami_id="ami-0e1727be7345e53ae"
 
                                         rm -rf stackapppipelines
@@ -344,9 +344,9 @@ pipeline {
                                         export env=$APP_ENV_DEV
                                         export appname=$app_name_stackapp
 
-                                        cd stackApp/iac/packer                                       
-                                        export mesg_ami_id=$(jq -r '.builds[-1].artifact_id' message_img_manifest.json | cut -d ":" -f2)                                        
-                                        echo "AMI_ID-MSG-->>"$export                                        
+                                        #cd stackApp/iac/packer                                       
+                                        #export mesg_ami_id=$(jq -r '.builds[-1].artifact_id' message_img_manifest.json | cut -d ":" -f2)                                        
+                                        #echo "AMI_ID-MSG-->>"$export                                        
                                         export mesg_ami_id="ami-033d5ea44c7d47269"
 
                                         rm -rf stackapppipelines
