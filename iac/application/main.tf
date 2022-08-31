@@ -24,12 +24,10 @@ module "app-launch-template" {
   instance_type = var.instance_type
   instdevice_name = var.instdevice_name 
   user_datascript =  var.user_datascript
-  tags = {
-    app_id   = var.app_id 
-    app_name   = var.app_name 
-    app_env   = var.app_env 
-    layer = "app"
-  } 
+  app_id   = var.app_id 
+  app_name   = var.app_name 
+  app_env   = var.app_env 
+  layer = "app"
 
   /*
     
@@ -93,12 +91,6 @@ module "app-asg" {
         }
       }
     }
-  tags = {
-    app_id   = var.app_id 
-    app_name   = var.app_name 
-    app_env   = var.app_env 
-    layer = "app"
-  }
 }
 
 data "aws_instances" "asg-instances" {
