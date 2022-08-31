@@ -45,3 +45,10 @@ variable "instance_type" {
   default = ""
 }
 
+variable "aws_route53_private_db_record" {
+  default = ""
+}
+
+variable "aws_route53_private_zone_name" {
+  default = ""
+}
