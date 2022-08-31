@@ -58,7 +58,7 @@ module "private-route53-records" {
         type = "A"
         ttl     = "300"
         //records = ["10.1.1.1"]
-        records = [data.aws_instances.db-asg-instances.ids]
+        records = data.aws_instances.db-asg-instances.ids
       },
       /*
       {
@@ -66,14 +66,14 @@ module "private-route53-records" {
         full_name_override = true        
         type = "A"
         ttl     = "300"
-        records = [data.aws_instances.message-asg-instances.ids]
+        records = data.aws_instances.message-asg-instances.ids
       },
       {
         name = var.aws_route53_private_cache_record
         full_name_override = true        
         type = "A"
         ttl     = "300"
-        records = [data.aws_instances.cache-asg-instances.ids]
+        records = data.aws_instances.cache-asg-instances.ids
       }   
       */       
   ]
