@@ -157,7 +157,7 @@ pipeline {
 
         stage('Network Infra Creation'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -220,7 +220,7 @@ pipeline {
                                         cd stackApp/iac/packer
                                         export app_ami_id=$(jq -r '.builds[-1].artifact_id' app_img_manifest.json | cut -d ":" -f2)
                                         echo "AMI_ID-APP-->>"$app_ami_id
-                                        export app_ami_id="ami-0e3c4f1e87ed81661"
+                                        #export app_ami_id="ami-0e3c4f1e87ed81661"
 
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
@@ -259,10 +259,10 @@ pipeline {
                                         export env=$APP_ENV_DEV
                                         export appname=$app_name_stackapp
 
-                                        #cd stackApp/iac/packer
-                                        #export db_ami_id=$(jq -r '.builds[-1].artifact_id' db_img_manifest.json | cut -d ":" -f2)                                        
-                                        #echo "AMI_ID-DB-->>"$db_ami_id                                        
-                                        export db_ami_id="ami-0302e41d1e1b68dec"
+                                        cd stackApp/iac/packer
+                                        export db_ami_id=$(jq -r '.builds[-1].artifact_id' db_img_manifest.json | cut -d ":" -f2)                                        
+                                        echo "AMI_ID-DB-->>"$db_ami_id                                        
+                                        #export db_ami_id="ami-0302e41d1e1b68dec"
                                         
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
@@ -278,7 +278,7 @@ pipeline {
 
         stage('Caching Infra Creation'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -301,16 +301,15 @@ pipeline {
                                         export env=$APP_ENV_DEV
                                         export appname=$app_name_stackapp
 
-                                        #cd stackApp/iac/packer                                       
-                                        #export cache_ami_id=$(jq -r '.builds[-1].artifact_id' cache_img_manifest.json | cut -d ":" -f2)                                        
-                                        #echo "AMI_ID-CACHE-->>"$cache_ami_id                                        
-                                        export cache_ami_id="ami-0e1727be7345e53ae"
+                                        cd stackApp/iac/packer                                       
+                                        export cache_ami_id=$(jq -r '.builds[-1].artifact_id' cache_img_manifest.json | cut -d ":" -f2)                                        
+                                        echo "AMI_ID-CACHE-->>"$cache_ami_id                                        
+                                        #export cache_ami_id="ami-0e1727be7345e53ae"
 
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
                                         cd stackapppipelines; chmod 777 *.*;
                                         ./manageInfra.sh create cache
-                                        #./manageInfra.sh destroy
 
                                     '''   
                                 }  
@@ -321,7 +320,7 @@ pipeline {
    
         stage('Messaging Infra Creation'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -344,16 +343,15 @@ pipeline {
                                         export env=$APP_ENV_DEV
                                         export appname=$app_name_stackapp
 
-                                        #cd stackApp/iac/packer                                       
-                                        #export mesg_ami_id=$(jq -r '.builds[-1].artifact_id' message_img_manifest.json | cut -d ":" -f2)                                        
-                                        #echo "AMI_ID-MSG-->>"$export                                        
-                                        export mesg_ami_id="ami-033d5ea44c7d47269"
+                                        cd stackApp/iac/packer                                       
+                                        export mesg_ami_id=$(jq -r '.builds[-1].artifact_id' message_img_manifest.json | cut -d ":" -f2)                                        
+                                        echo "AMI_ID-MSG-->>"$export                                        
+                                        #export mesg_ami_id="ami-033d5ea44c7d47269"
 
                                         rm -rf stackapppipelines
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
                                         cd stackapppipelines; chmod 777 *.*;
                                         ./manageInfra.sh create message
-                                        #./manageInfra.sh destroy
 
                                     '''   
                                 }  
@@ -402,7 +400,7 @@ pipeline {
 
         stage('All Infra Destroy'){
             when{
-                environment name: 'infracreatemode', value: 'false'
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -429,11 +427,11 @@ pipeline {
                                         git clone -b main https://github.com/ashwinbittu/stackapppipelines.git
                                         cd stackapppipelines; chmod 777 *.*;
                                         ./manageInfra.sh destroy route53
-                                        #./manageInfra.sh destroy message
-                                        #./manageInfra.sh destroy cache
+                                        ./manageInfra.sh destroy message
+                                        ./manageInfra.sh destroy cache
                                         ./manageInfra.sh destroy database
-                                        #./manageInfra.sh destroy application
-                                        #./manageInfra.sh destroy network   
+                                        ./manageInfra.sh destroy application
+                                        ./manageInfra.sh destroy network   
 
 
                                     '''   
