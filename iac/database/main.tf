@@ -91,7 +91,7 @@ module "db-asg" {
         }
       }
     }
-     
+
 }
 
 data "aws_instances" "asg-instances" {
@@ -105,10 +105,18 @@ data "aws_instances" "asg-instances" {
   instance_state_names = ["running", "stopped"]
 }
 
+data "aws_route53_zone" "selected" {
+  name  = var.aws_route53_private_zone_name
+  private_zone = true
+}
+
+
 module "private-route53-records" {
   source = "app.terraform.io/radammcorp/route53-records/aws"
-  zone_name = var.aws_route53_private_zone_name
-  
+  #zone_name = var.aws_route53_private_zone_name
+  zone_id = data.aws_route53_zone.selected.zone_id
+  private_zone = true
+
   records = [ 
       {
         name = var.aws_route53_private_db_record
