@@ -105,6 +105,10 @@ data "aws_instances" "asg-instances" {
   instance_state_names = ["running", "stopped"]
 }
 
+output ids {
+    value = data.aws_instances.asg-instances.ids
+}
+
 data "aws_route53_zone" "selected" {
   name  = var.aws_route53_private_zone_name
   private_zone = true
@@ -122,7 +126,8 @@ module "private-route53-records" {
         name = var.aws_route53_private_db_record
         full_name_override = true        
         type = "A"
-        records = [data.aws_instances.asg-instances.ids]
+        records = ["10.1.1.1"]
+        //records = [data.aws_instances.asg-instances.ids]
       }    
   ]
 
