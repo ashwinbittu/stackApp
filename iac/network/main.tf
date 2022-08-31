@@ -246,12 +246,12 @@ module "alb-front" {
 
 }
 
+/*
 locals {
-  zone_name = sort(keys(module.public-route53T-zones.route53_zone_zone_id))[0]
-  #  zone_id = module.zones.route53_zone_zone_id["terraform-aws-modules-example.com"]
+  zone_name = sort(keys(module.public-route53-zone.route53_zone_zone_id))[0]
 }
 
-module "public-route53T-zones" {
+module "public-route53-zone" {
   source = "app.terraform.io/radammcorp/route53-zones/aws"
   zones = {
       "public-vpc" = {
@@ -261,13 +261,13 @@ module "public-route53T-zones" {
                 vpc_id =  module.vpc.aws_vpc_id
               }
             ]
-      }
   }
 }
+*/
 
-module "public-route53T-records" {
+module "public-route53-records" {
   source = "app.terraform.io/radammcorp/route53-records/aws"
-  zone_name = local.zone_name
+  zone_name = var.aws_route53_public_zone_name
   records = [ 
       {
         name = var.aws_route53_public_record_name
@@ -280,64 +280,11 @@ module "public-route53T-records" {
       }
   ]
 
-  depends_on = [module.public-route53T-zones]
+  #depends_on = [module.public-route53-zone]
 }
 
-/*
-module "public-route53" {
-  source = "app.terraform.io/radammcorp/route53/aws"
- 
-  app_env   = var.app_env
-  app_name  = var.app_name  
-  app_id   = var.app_id
-  
-  //createzone = false
-  createrecord = true
-  
-
-  zones = {
-      "public-vpc" = {
-            domain_name = var.aws_route53_public_zone_name
-            vpc = [
-              {
-                vpc_id =  module.vpc.aws_vpc_id
-              }
-            ]
-      }
-  }
-
-  zone_name = var.aws_route53_public_zone_id
-  #zone_id = var.aws_route53_public_zone_id
-  private_zone = false
-
-  records = [ 
-      {
-        name = var.aws_route53_public_record_name
-        full_name_override = true
-        type = "A"
-        alias = {
-          name    = module.alb-front.lb_dns_name
-          zone_id = module.alb-front.lb_zone_id
-        }
-      }
-  ]
-
-}
-
-
-
-
-module "private-route53" {
-  source = "app.terraform.io/radammcorp/route53/aws"
-
-  app_env   = var.app_env
-  app_name  = var.app_name  
-  app_id   = var.app_id
-  
-
-  createzone = true
-  createrecord = false  
-
+module "private-route53-zone" {
+  source = "app.terraform.io/radammcorp/route53-zones/aws"
   zones = {
       "private-vpc" = {
             domain_name = var.aws_route53_private_zone_name
@@ -351,7 +298,7 @@ module "private-route53" {
   
 }
 
-*/
+
 
 /*
 
