@@ -78,6 +78,16 @@ module "sg-app" {
 
     number_of_computed_ingress_with_source_security_group_id = 1
 
+    egress_with_cidr_blocks = [
+      {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = "0.0.0.0/0"
+      }
+    ]    
+      
+    /*
     computed_egress_with_source_security_group_id = [
       {
         from_port   = 0
@@ -87,7 +97,8 @@ module "sg-app" {
       }          
     ]
 
-    number_of_computed_egress_with_source_security_group_id = 1      
+    number_of_computed_egress_with_source_security_group_id = 1  
+    */    
   }
 
 module "sg-db" {
@@ -108,7 +119,17 @@ module "sg-db" {
       ]
 
     number_of_computed_ingress_with_source_security_group_id = 1  
-     
+
+    egress_with_cidr_blocks = [
+      {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = "0.0.0.0/0"
+      }
+    ]
+
+    /*
     computed_egress_with_source_security_group_id = [
         {
           from_port   = 0
@@ -119,6 +140,7 @@ module "sg-db" {
       ]
 
     number_of_computed_egress_with_source_security_group_id = 1
+    */      
 }  
 
 module "sg-cache" {
@@ -140,6 +162,16 @@ module "sg-cache" {
 
     number_of_computed_ingress_with_source_security_group_id = 1  
 
+    egress_with_cidr_blocks = [
+      {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = "0.0.0.0/0"
+      }
+    ]
+
+    /*
     computed_egress_with_source_security_group_id = [
         {
           from_port   = 0
@@ -149,7 +181,8 @@ module "sg-cache" {
         }       
       ]
           
-    number_of_computed_egress_with_source_security_group_id = 1         
+    number_of_computed_egress_with_source_security_group_id = 1  
+    */           
 } 
 
 module "sg-message" {
@@ -171,7 +204,16 @@ module "sg-message" {
 
     number_of_computed_ingress_with_source_security_group_id = 1
 
+    egress_with_cidr_blocks = [
+      {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = "0.0.0.0/0"
+      }
+    ]
 
+    /*
     computed_egress_with_source_security_group_id = [
         {
           from_port   = 0
@@ -182,6 +224,7 @@ module "sg-message" {
       ]
           
     number_of_computed_egress_with_source_security_group_id = 1        
+    */
 } 
 
 module "ec2key" {

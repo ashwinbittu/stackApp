@@ -55,7 +55,7 @@ module "message-asg" {
   app_env   = var.app_env 
   repave_strategy = var.repave_strategy  
   layer = "cache"
-  snsemail = "ashwin.bittu@gmail.com"
+  snsemail = "snsemaiddl@notif.com"
 
   desired_capacity          = 1
   min_size                  = 1
