@@ -247,7 +247,7 @@ module "alb-front" {
 }
 
 locals {
-  zone_name = sort(keys(module.zones.route53_zone_zone_id))[0]
+  zone_name = sort(keys(module.public-route53T-zones.route53_zone_zone_id))[0]
   #  zone_id = module.zones.route53_zone_zone_id["terraform-aws-modules-example.com"]
 }
 
