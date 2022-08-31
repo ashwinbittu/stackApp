@@ -259,9 +259,9 @@ pipeline {
                                         export env=$APP_ENV_DEV
                                         export appname=$app_name_stackapp
 
-                                        cd stackApp/iac/packer
-                                        export db_ami_id=$(jq -r '.builds[-1].artifact_id' db_img_manifest.json | cut -d ":" -f2)                                        
-                                        echo "AMI_ID-DB-->>"$db_ami_id                                        
+                                        #cd stackApp/iac/packer
+                                        #export db_ami_id=$(jq -r '.builds[-1].artifact_id' db_img_manifest.json | cut -d ":" -f2)                                        
+                                        #echo "AMI_ID-DB-->>"$db_ami_id                                        
                                         export db_ami_id="ami-0302e41d1e1b68dec"
                                         
                                         rm -rf stackapppipelines
