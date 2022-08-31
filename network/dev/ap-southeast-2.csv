@@ -1,0 +1,10 @@
+app_name;stackapp;terraform;false;false;App Name
+app_id;167843;terraform;false;false;App ID
+app_env;DEV;terraform;false;false;App ENV
+aws_vpc_instance_tenancy;default;terraform;false;false;VPC Instance Tenancy
+no_of_subnets;3;terraform;false;false;Number of Subnets Used
+key_name;stackappkey;terraform;false;false;SrvKeyName
+aws_route53_zone_id;Z0970915QC1TPFD6UAWH;terraform;false;false;Hosted Zone ID
+aws_route53_zone_name;ashwinradhakrishnan.net.;terraform;false;false;Route53 DNS Name
+aws_route53_record_name;www.ashwinradhakrishnan.net.;terraform;false;false;Route53 DNS Record
+repave_strategy;bluegreen;terraform;false;false;Repaving Strategy
