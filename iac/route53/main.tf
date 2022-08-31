@@ -19,7 +19,6 @@ data "aws_instances" "db-asg-instances" {
   instance_state_names = ["running", "stopped"]
 }
 
-/*
 
 data "aws_instances" "cache-asg-instances" {
   instance_tags = {
@@ -43,7 +42,7 @@ data "aws_instances" "message-asg-instances" {
   instance_state_names = ["running", "stopped"]
 }
 
-*/
+
 
 module "private-route53-records" {
   source = "app.terraform.io/radammcorp/route53-records/aws"
@@ -60,7 +59,6 @@ module "private-route53-records" {
         //records = ["10.1.1.1"]
         records = data.aws_instances.db-asg-instances.private_ips
       },
-      /*
       {
         name = var.aws_route53_private_msg_record
         full_name_override = true        
@@ -74,8 +72,7 @@ module "private-route53-records" {
         type = "A"
         ttl     = "300"
         records = data.aws_instances.cache-asg-instances.private_ips
-      }   
-      */       
+      }               
   ]
 
 }

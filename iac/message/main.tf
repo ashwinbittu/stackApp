@@ -24,7 +24,10 @@ module "message-launch-template" {
   instance_type = var.instance_type
   instdevice_name = var.instdevice_name 
   user_datascript =  var.user_datascript 
-
+  app_id   = var.app_id 
+  app_name   = var.app_name 
+  app_env   = var.app_env 
+  layer = "message"
   /*
  
   repave_strategy = var.repave_strategy  
