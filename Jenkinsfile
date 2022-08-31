@@ -236,7 +236,7 @@ pipeline {
 
         stage('Database Infra Creation Using Terraform'){
             when{
-                environment name: 'infracreatemode', value: 'true'
+                environment name: 'infracreatemode', value: 'false'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -364,7 +364,7 @@ pipeline {
 
         stage('All Infra Destroy Using Terraform'){
             when{
-                environment name: 'infracreatemode', value: 'false'
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                     withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "awscreds", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
@@ -392,7 +392,7 @@ pipeline {
                                         cd stackapppipelines; chmod 777 *.*;
                                         #./manageInfra.sh destroy message
                                         #./manageInfra.sh destroy cache
-                                        #./manageInfra.sh destroy database
+                                        ./manageInfra.sh destroy database
                                         #./manageInfra.sh destroy application
                                         ./manageInfra.sh destroy network   
 
