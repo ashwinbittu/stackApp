@@ -101,17 +101,17 @@ output "aws_front_alb_target_group_names" {
 
 output "route53_zone_zone_id" {
   description = "Zone ID of Route53 zone"
-  value       = module.private-route53.route53_zone_zone_id
+  value       = module.private-route53-zone.route53_zone_zone_id
 }
 
 output "route53_zone_name_servers" {
   description = "Name servers of Route53 zone"
-  value       = module.private-route53.route53_zone_name_servers
+  value       = module.private-route53-zone.route53_zone_name_servers
 }
 
 output "route53_zone_name" {
   description = "Name of Route53 zone"
-  value       = module.private-route53.route53_zone_name
+  value       = module.private-route53-zone.route53_zone_name
 }
 
 
