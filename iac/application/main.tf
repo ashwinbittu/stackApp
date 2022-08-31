@@ -24,7 +24,13 @@ module "app-launch-template" {
   instance_type = var.instance_type
   instdevice_name = var.instdevice_name 
   user_datascript =  var.user_datascript
-  
+  tags = {
+    app_id   = var.app_id 
+    app_name   = var.app_name 
+    app_env   = var.app_env 
+    layer = "app"
+  } 
+
   /*
     
   repave_strategy = var.repave_strategy  
@@ -87,54 +93,26 @@ module "app-asg" {
         }
       }
     }
-
+  tags = {
+    app_id   = var.app_id 
+    app_name   = var.app_name 
+    app_env   = var.app_env 
+    layer = "app"
+  }
 }
 
-data "aws_route53_zone" "privzone" {
-  name         = var.aws_route53_private_zone_name
-  private_zone = true
+data "aws_instances" "asg-instances" {
+  instance_tags = {
+    app_id   = var.app_id 
+    app_name   = var.app_name 
+    app_env   = var.app_env 
+    layer = "app"
+  }
+
+  instance_state_names = ["running", "stopped"]
 }
 
-module "private-route53" {
-  source = "app.terraform.io/radammcorp/route53/aws"
-  aws_region = var.aws_region
-  app_env   = var.app_env
-  app_name  = var.app_name  
-  app_id   = var.app_id  
 
-  createzone = false
-  createrecord = true
-  
-  zone_name = var.aws_route53_private_zone_name
-  full_name_override = true
- 
-  records = [ 
-      {
-        name = var.aws_route53_private_cache_record
-        type = "A"
-        alias = {
-          name    = module.alb-front.lb_dns_name
-          zone_id = module.alb-front.lb_zone_id
-        }
-      },
-      {
-        name = var.aws_route53_private_db_record
-        type = "A"
-        alias = {
-          name    = module.alb-front.lb_dns_name
-          zone_id = module.alb-front.lb_zone_id
-        }
-      },   
-      {
-        name = var.aws_route53_private_msg_record
-        type = "A"
-        alias = {
-          name    = module.alb-front.lb_dns_name
-          zone_id = module.alb-front.lb_zone_id
-        }
-      }        
-  ]
-  aws_vpc_id = module.vpc.aws_vpc_id
-}
+
 
 
