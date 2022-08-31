@@ -10,12 +10,15 @@ variable "tf_host" {
 }
 
 variable "app_env" {
+  default = ""
 }
 
 variable "app_name" {
+    default = ""
 }
 
 variable "app_id" {
+    default = ""
 }
 
 variable "aws_route53_private_zone_name" {
