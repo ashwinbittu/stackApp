@@ -18,30 +18,18 @@ variable "app_name" {
 variable "app_id" {
 }
 
-variable "repave_strategy" {
+variable "aws_route53_private_zone_name" {
   default = ""
 }
 
-variable "lt_name" {
-}
-
-variable "lt_description" {
+variable "aws_route53_private_db_record" {
   default = ""
 }
 
-variable "ami_id" {
+variable "aws_route53_private_msg_record" {
   default = ""
 }
 
-variable "user_datascript" {
+variable "aws_route53_private_cache_record" {
   default = ""
 }
-
-variable "instdevice_name" {
-  default = ""
-}
-
-variable "instance_type" {
-  default = ""
-}
-
