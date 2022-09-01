@@ -8,14 +8,14 @@ pipeline {
         artficatreporeg = "https://ashwinbittu.jfrog.io"
         artifactrepo = "/stackapp-repo"
         artifactrepocreds = 'jfrog-artifact-saas'
-        infracreatemode = true
+        infracreatemode = false
     }
 
     stages{
 
         stage('Build App'){
             when{
-                environment name: 'infracreatemode', value: 'false'
+                environment name: 'infracreatemode', value: 'true'
             }            
             steps {
                 sh 'mvn clean install -DskipTests'
@@ -30,7 +30,7 @@ pipeline {
 
         stage('Unit Testing Of App'){
             when{
-                environment name: 'infracreatemode', value: 'false'
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                 sh 'mvn test'
@@ -39,7 +39,7 @@ pipeline {
 
         stage('Integration Testing of App'){
             when{
-                environment name: 'infracreatemode', value: 'false'
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                 sh 'mvn verify -DskipUnitTests'
@@ -48,7 +48,7 @@ pipeline {
 
         stage ('Code Analysis With Checkstyle'){
             when{
-                environment name: 'infracreatemode', value: 'false'
+                environment name: 'infracreatemode', value: 'true'
             }              
             steps {
                 sh 'mvn checkstyle:checkstyle'
@@ -66,7 +66,7 @@ pipeline {
              scannerHome = tool 'sonarqscan'
           }
           when{
-                environment name: 'infracreatemode', value: 'false'
+                environment name: 'infracreatemode', value: 'true'
           }          
           steps {
              withSonarQubeEnv('sonar') {
@@ -89,7 +89,7 @@ pipeline {
 
         stage ('Upload App Image to Artifactory') {
             when{
-                environment name: 'infracreatemode', value: 'false'
+                environment name: 'infracreatemode', value: 'true'
             }              
                     steps {
                         withCredentials([string(credentialsId: 'ART_TOKEN', variable: 'ART_TOKEN')]){ 
